@@ -530,3 +530,8 @@ docker compose up
 - **Service name** — allows containers to find each other, for example `database`
 
 More detailed explanations and exercises are provided separately in the course material.
+=======
+Ryhmä 3.
+
+123
+>>>>>>> origin/main
