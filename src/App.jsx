@@ -36,8 +36,8 @@ function App() {
             <h3>Data from Backend:</h3>
             <ul style={{ textAlign: 'left', margin: '10px 0' }}>
               { data.map((item) => (
-                <li key={item.id} style={{ marginBottom: '10px' }}>
-                  {`ID: ${item.id} - ${item.description}`}
+                <li key={item.movie_id} style={{ marginBottom: '10px' }}>
+                  {`ID: ${item.movie_id} - ${item.title}`}
                 </li>
               ))}
             </ul>
