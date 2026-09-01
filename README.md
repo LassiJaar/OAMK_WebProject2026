@@ -531,7 +531,9 @@ docker compose up
 
 More detailed explanations and exercises are provided separately in the course material.
 =======
+
 Ryhmä 3.
 
 123
->>>>>>> origin/main
+
+> > > > > > > origin/main

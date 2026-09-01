@@ -1,8 +1,8 @@
-import { Router } from 'express'
-import { getTests } from '../controllers/TestController.js'
+import { Router } from 'express';
+import { getTests } from '../controllers/TestController.js';
 
-const router = Router()
+const router = Router();
 
-router.get('/', getTests)
+router.get('/', getTests);
 
-export default router
+export default router;
