@@ -2,7 +2,7 @@
 # Frontend (React/Vite) + Backend (Express/Node.js) + Database (PostgreSQL)
 #
 # Basic Commands:
-# 
+#
 # Build and start all services:
 # docker compose up --build
 #
@@ -40,13 +40,13 @@ services:
     env_file:
       - .env
     ports:
-      - "${DB_EXPOSED_PORT}:${DB_PORT}"
+      - '${DB_EXPOSED_PORT}:${DB_PORT}'
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./api/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -57,7 +57,7 @@ services:
     env_file:
       - .env
     ports:
-      - "${BACKEND_EXPOSED_PORT}:${PORT}"
+      - '${BACKEND_EXPOSED_PORT}:${PORT}'
     volumes:
       - ./api:/app
       - /app/node_modules
@@ -70,7 +70,8 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:${PORT}/api/health || exit 1"]
+      test:
+        ['CMD-SHELL', 'curl -f http://localhost:${PORT}/api/health || exit 1']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -81,7 +82,7 @@ services:
     env_file:
       - .env
     ports:
-      - "${FRONTEND_EXPOSED_PORT}:${FRONTEND_PORT}"
+      - '${FRONTEND_EXPOSED_PORT}:${FRONTEND_PORT}'
     volumes:
       - .:/app
       - /app/node_modules
