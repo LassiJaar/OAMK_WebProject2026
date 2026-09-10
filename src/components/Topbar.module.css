@@ -1,0 +1,27 @@
+.topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border: 1px solid grey;
+}
+.center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.center a p {
+  padding: 0 10px;
+}
+
+.center a:not(:last-child) p {
+  border-right: 1px solid black;
+}
+
+.account {
+  border: 1px solid black;
+  border-radius: 100px;
+  padding: 5px;
+}

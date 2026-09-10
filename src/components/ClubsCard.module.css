@@ -1,0 +1,34 @@
+.card {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+
+.card img {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.card p {
+  padding: 0 10px;
+  min-height: 3.5rem;
+}
+
+.button {
+  padding: 10px 20px;
+  margin: 5px 0;
+  background-color: white;
+  border-radius: 10px;
+  width: 90%;
+}
+
+@media (min-width: 600px) {
+  .card {
+    max-width: calc((100% - 5rem) / 5);
+    flex: 1 1 auto;
+  }
+}
