@@ -164,7 +164,7 @@ const Search = () => {
             selected={minYear}
             setSelected={setMinYear}
             options={[{ value: -1, name: 'Start year' }].concat(
-              years.filter((y) => y.name <= maxYear)
+              years.filter((y) => y.name <= (maxYear != -1 ? maxYear : 3000))
             )}
           ></DropdownSelector>
           <DropdownSelector
