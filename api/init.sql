@@ -78,7 +78,14 @@ INSERT INTO movie (movie_id, title, overview, created_at) VALUES
 -- 3. Clubs
 INSERT INTO club (name, description, created_at) VALUES
   ('Sci-Fi Enthusiasts', 'A club for fans of science fiction cinema.', '2024-01-11 10:00:00+00'),
-  ('Classic Cinema Society', 'Discussing iconic films throughout history.', '2024-01-16 12:00:00+00');
+  ('Classic Cinema Society', 'Discussing iconic films throughout history.', '2024-01-16 12:00:00+00'),
+  ('Anime & Animation Guild', 'Exploring the best of animated storytelling from Studio Ghibli to modern masterpieces.', '2024-02-05 10:00:00+00'),
+  ('Horror & Thriller Lounge', 'For fans of jump scares, psychological thrillers, and spooky cinema.', '2024-02-08 14:15:00+00'),
+  ('Documentary Film Circle', 'Deep dives into real-world stories, history, and investigative documentaries.', '2024-02-10 11:30:00+00'),
+  ('Indie & Foreign Film Spot', 'Celebrating independent productions and international foreign language films.', '2024-02-12 16:45:00+00'),
+  ('Action & Blockbuster Central', 'High-octane explosions, superhero sagas, and epic popcorn flicks.', '2024-02-15 09:20:00+00'),
+  ('Rom-Com & Drama Corner', 'Heartwarming romances, tear-jerkers, and compelling character dramas.', '2024-02-18 18:00:00+00'),
+  ('Cult Classics & B-Movies', 'Appreciating underground hits, campy horror, and forgotten cinema gems.', '2024-02-20 20:10:00+00');
 
 -- 4. Club Memberships
 INSERT INTO club_account (club_id, account_id, role, joined_at) VALUES
