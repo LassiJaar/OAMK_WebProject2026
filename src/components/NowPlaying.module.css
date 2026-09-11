@@ -1,8 +1,17 @@
+:root {
+  --gutter: 20px;
+}
+
 .movies {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(50% - (var(--gutter) / 4));
+  grid-gap: calc(var(--gutter) / 2);
+  
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 0 0 calc(.75 * var(--gutter)) 0;
+  margin-bottom: calc(-.25 * var(--gutter));
 }
 
 .title {
@@ -18,4 +27,10 @@
 
 .filters button {
   padding: 10px;
+}
+
+@media (min-width: 600px) {
+  .movies {
+    grid-auto-columns: calc((100% - (calc(var(--gutter) / 2) * 4)) / 5);
+  }
 }

@@ -4,7 +4,7 @@ import styles from './MovieCard.module.css';
 const MovieCard = ({ movie }) => {
   return (
     <div className={styles.card}>
-      <Link to={`/movies/${movie.movie_id}`}>
+      <Link to={`/movie/${movie.movie_id}`}>
         <div>
           <p>{movie.title}</p>
           <img

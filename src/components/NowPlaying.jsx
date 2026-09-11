@@ -36,6 +36,10 @@ const NowPlaying = () => {
           {movies.map((m) => (
             <MovieCard key={m.movie_id} movie={m}></MovieCard>
           ))}
+          {/* Repeat twice for slider testing, remove second one later. */}
+            {movies.map((m) => (
+              <MovieCard key={m.movie_id} movie={m}></MovieCard>
+            ))}
         </div>
       )}
     </div>
