@@ -8,7 +8,7 @@ const Topbar = () => {
       <div className={styles.center}>
         <TopbarTab to={'/'} text="Home"></TopbarTab>
         <TopbarTab to={'/search'} text="Search"></TopbarTab>
-        <TopbarTab to={'/clubs'} text="clubs"></TopbarTab>
+        <TopbarTab to={'/clubs'} text="Clubs"></TopbarTab>
       </div>
       <TopbarTab
         to={'/account'}
