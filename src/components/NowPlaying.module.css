@@ -1,0 +1,21 @@
+.movies {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  display: inline-block;
+  border-bottom: 10px solid grey;
+}
+
+.filters {
+  padding: 10px;
+  display: flex;
+  gap: 1rem;
+}
+
+.filters button {
+  padding: 10px;
+}
