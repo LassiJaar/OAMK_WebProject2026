@@ -1,16 +1,23 @@
-import { Link } from 'react-router';
-import styles from './MovieCard.module.css';
+import { Link } from "react-router";
+import styles from "./MovieCard.module.css";
+
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const MovieCard = ({ movie }) => {
   return (
     <div className={styles.card}>
-      <Link to={`/movie/${movie.movie_id}`}>
+      <Link to={`/movie/${movie.id}`}>
         <div>
           <p>{movie.title}</p>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Image.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
-            alt={movie.movie_id}
-          ></img>
+
+          {movie.posterPath ? (
+            <img
+              src={`${IMAGE_BASE_URL}${movie.posterPath}`}
+              alt={`${movie.title} poster`}
+            />
+          ) : (
+            <p>No poster available</p>
+          )}
         </div>
       </Link>
     </div>
