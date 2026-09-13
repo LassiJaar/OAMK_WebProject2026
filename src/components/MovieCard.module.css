@@ -3,26 +3,26 @@
 }
 
 .card {
-  scroll-snap-align: center;
-  padding: calc(var(--gutter) / 2 * 1.5);
+  width: 280px;
+  min-width: 280px;
+  padding: 10px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   background: #fff;
   border-radius: 8px;
-  box-sizing: border-box;
 }
 
 .card img {
-  width: 100%;
+  display: block;
+  width: 260px;
   height: auto;
   margin-bottom: 5px;
-  object-fit: cover;
 }
 
 .card p {
-  padding: 0 10px;
+  padding: 0 5px;
   min-height: 3.5rem;
   margin: 0;
   text-align: center;
