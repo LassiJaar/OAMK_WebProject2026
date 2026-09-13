@@ -8,7 +8,7 @@ const auth = (req, _res, next) => {
     return next(error);
   }
   try {
-    req.user = verify(token, process.env.JWT_SECRET);
+    req.account = verify(token, process.env.JWT_SECRET);
     return next();
   } catch {
     const error = new Error('Invalid or expired token');

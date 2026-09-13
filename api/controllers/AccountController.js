@@ -26,6 +26,11 @@ const createAccount = async (req, res, next) => {
 
 const removeAccount = async (req, res, next) => {
   const { id } = req.params;
+  if (req.account?.account_id != id) {
+    const error = new Error('You can only delete your own account');
+    error.status = 403;
+    return next(error);
+  }
   try {
     await deleteAccount(id);
     return res.status(200).end();
