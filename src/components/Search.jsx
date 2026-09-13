@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import axios from 'axios';
 import styles from './Search.module.css';
 import DropdownSelector from './DropdownSelector';
+import MovieCard from './MovieCard';
 
 const Search = () => {
   const [search, setSearch] = useState('');
@@ -9,6 +11,8 @@ const Search = () => {
   const [minYear, setMinYear] = useState(-1);
   const [maxYear, setMaxYear] = useState(-1);
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const genres = [
     { id: -1, name: 'Genres' },
     {
@@ -117,6 +121,26 @@ const Search = () => {
       value: 5,
       name: '5',
     },
+    {
+      value: 6,
+      name: '6',
+    },
+    {
+      value: 7,
+      name: '7',
+    },
+    {
+      value: 8,
+      name: '8',
+    },
+    {
+      value: 9,
+      name: '9',
+    },
+    {
+      value: 10,
+      name: '10',
+    },
   ];
   let currentYear = new Date().getFullYear();
   const startYear = 1900;
@@ -126,8 +150,27 @@ const Search = () => {
     currentYear--;
   }
 
-  const sendSearch = () => {
-    console.log(`Searching ${search} ${genre} ${rating} ${minYear} ${maxYear}`);
+  const sendSearch = async () => {
+    if (!search.trim()) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const params = { query: search.trim() };
+      if (genre !== -1) params.genre = genre;
+      if (rating !== -1) params.rating = rating;
+      if (minYear !== -1) params.minYear = minYear;
+      if (maxYear !== -1) params.maxYear = maxYear;
+
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/movies/search`, { params });
+      setResults(response.data);
+    } catch (err) {
+      setError(err.response?.data?.error?.message || 'Could not search for movies');
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -148,6 +191,7 @@ const Search = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           ></input>
+          <button type="submit">Search</button>
         </form>
       </div>
       <div className={styles.advanced}>
@@ -197,7 +241,16 @@ const Search = () => {
         </div>
       </div>
       <div className={styles.results}>
-        {results.length == 0 && <p>Search results</p>}
+        {loading && <p>Searching...</p>}
+        {error && <p>{error}</p>}
+        {!loading && !error && results.length === 0 && <p>Search results</p>}
+        {!loading && !error && results.length > 0 && (
+          <div className={styles.moviegrid}>
+            {results.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

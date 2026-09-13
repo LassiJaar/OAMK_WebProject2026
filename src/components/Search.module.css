@@ -1,6 +1,12 @@
 .searchbar {
   width: 100%;
 }
+
+.moviegrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
 .advanced {
   border: 1px solid grey;
   padding: 10px 10px;
