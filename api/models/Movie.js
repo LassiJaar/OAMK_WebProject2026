@@ -1,5 +1,65 @@
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
+const searchMovies = async ({ query, genre, minYear, maxYear, rating }) => {
+  const token = process.env.TMDB_TOKEN;
+
+  if (!token) {
+    const error = new Error('TMDB_TOKEN is not configured.');
+    error.status = 500;
+    throw error;
+  }
+
+  const params = new URLSearchParams({
+    query,
+  });
+
+  const response = await fetch(`${TMDB_BASE_URL}/search/movie?${params}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    const error = new Error(
+      `TMDB request failed with status ${response.status}. ${details}`
+    );
+    error.status = response.status >= 500 ? 502 : response.status;
+    throw error;
+  }
+
+  const data = await response.json();
+  return (data.results || [])
+    .filter((movie) => {
+      const releaseYear = movie.release_date
+        ? Number(movie.release_date.slice(0, 4))
+        : null;
+      const matchesGenre =
+        genre === undefined || movie.genre_ids?.includes(Number(genre));
+      const matchesMinYear =
+        minYear === undefined ||
+        (releaseYear !== null && releaseYear >= Number(minYear));
+      const matchesMaxYear =
+        maxYear === undefined ||
+        (releaseYear !== null && releaseYear <= Number(maxYear));
+      const matchesRating =
+        rating === undefined || movie.vote_average >= Number(rating);
+
+      return matchesGenre && matchesMinYear && matchesMaxYear && matchesRating;
+    })
+    .map((movie) => ({
+      id: movie.id,
+      title: movie.title,
+      originalTitle: movie.original_title,
+      posterPath: movie.poster_path,
+      backdropPath: movie.backdrop_path,
+      releaseDate: movie.release_date,
+      overview: movie.overview,
+      rating: movie.vote_average,
+    }));
+};
+
 const getNowPlayingMovies = async () => {
   const token = process.env.TMDB_TOKEN;
 
@@ -26,12 +86,11 @@ const getNowPlayingMovies = async () => {
     const error = new Error(
       `TMDB request failed with status ${response.status}. ${details}`
     );
-    error.status = 502;
+    error.status = response.status >= 500 ? 502 : response.status;
     throw error;
   }
 
   const data = await response.json();
-
   return (data.results ?? []).map((movie) => ({
     id: movie.id,
     title: movie.title,
@@ -44,4 +103,4 @@ const getNowPlayingMovies = async () => {
   }));
 };
 
-export { getNowPlayingMovies };
+export { searchMovies, getNowPlayingMovies };
