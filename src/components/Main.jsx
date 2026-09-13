@@ -9,7 +9,7 @@ const Main = () => {
   return (
     <div>
       <Topbar></Topbar>
-      
+
       <div className={styles.content}>
         <Routes>
           <Route path="/" element={<NowPlaying></NowPlaying>}></Route>

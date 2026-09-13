@@ -15,6 +15,11 @@ const getMovies = async (req, res, next) => {
       maxYear: maxYear || undefined,
       rating: rating || undefined,
     });
+import { getNowPlayingMovies } from '../models/Movie.js';
+
+const getNowPlaying = async (req, res, next) => {
+  try {
+    const movies = await getNowPlayingMovies();
     res.status(200).json(movies);
   } catch (error) {
     next(error);
@@ -22,3 +27,4 @@ const getMovies = async (req, res, next) => {
 };
 
 export { getMovies };
+export { getNowPlaying };
