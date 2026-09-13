@@ -1,7 +1,7 @@
-import { Link } from "react-router";
-import styles from "./MovieCard.module.css";
+import { Link } from 'react-router';
+import styles from './MovieCard.module.css';
 
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 const MovieCard = ({ movie }) => {
   return (

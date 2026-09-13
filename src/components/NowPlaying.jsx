@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import styles from "./NowPlaying.module.css";
-import MovieCard from "./MovieCard";
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import styles from './NowPlaying.module.css';
+import MovieCard from './MovieCard';
 
 const NowPlaying = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const listRef = useRef(null);
 
@@ -14,10 +14,10 @@ const NowPlaying = () => {
     const fetchNowPlaying = async () => {
       try {
         setLoading(true);
-        setError("");
+        setError('');
 
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/movies/now-playing`,
+          `${import.meta.env.VITE_API_URL}/movies/now-playing`
         );
 
         setMovies(Array.isArray(response.data) ? response.data : []);
@@ -25,7 +25,7 @@ const NowPlaying = () => {
         setError(
           err.response?.data?.error?.message ||
             err.message ||
-            "Could not load movies currently in cinemas.",
+            'Could not load movies currently in cinemas.'
         );
       } finally {
         setLoading(false);
@@ -40,7 +40,7 @@ const NowPlaying = () => {
 
     listRef.current.scrollBy({
       left: direction * listRef.current.clientWidth * 0.8,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
