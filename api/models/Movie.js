@@ -2,10 +2,7 @@ const TMDB_URL = 'https://api.themoviedb.org/3/search/movie';
 
 const searchMovies = async ({ query, genre, minYear, maxYear, rating }) => {
   const params = new URLSearchParams({
-    query,
-    include_adult: 'false',
-    language: 'en-US',
-    page: '1',
+    query
   });
 
   const response = await fetch(`${TMDB_URL}?${params}`, {
