@@ -4,6 +4,7 @@ import cors from 'cors';
 import errorHandler from './middleware/errorHandler.js';
 import testRouter from './routes/testRouter.js';
 import clubRouter from './routes/clubRouter.js';
+import accountRouter from './routes/accountRouter.js';
 import movieRouter from './routes/movieRouter.js';
 
 const port = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', testRouter);
 app.use('/clubs', clubRouter);
+app.use('/accounts', accountRouter);
 app.use('/movies', movieRouter);
 
 // Health check endpoint for database connectivity
