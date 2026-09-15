@@ -1,20 +1,19 @@
 import TopbarTab from './TopbarTab';
 import styles from './Topbar.module.css';
+import logo from '../assets/MovieNightLogoVer2.png';
 
 const Topbar = () => {
   return (
     <div className={styles.topbar}>
-      <img alt="MovieNight logo"></img>
+      <img src={logo} alt="MovieNight logo" className={styles.logo} />
+
       <div className={styles.center}>
-        <TopbarTab to={'/'} text="Home"></TopbarTab>
-        <TopbarTab to={'/search'} text="Search"></TopbarTab>
-        <TopbarTab to={'/clubs'} text="Clubs"></TopbarTab>
+        <TopbarTab to="/" text="Home" styles={styles.tab} />
+        <TopbarTab to="/search" text="Search" styles={styles.tab} />
+        <TopbarTab to="/clubs" text="Clubs" styles={styles.tab} />
       </div>
-      <TopbarTab
-        to={'/account'}
-        text="My account"
-        styles={styles.account}
-      ></TopbarTab>
+
+      <TopbarTab to="/account" text="My account" styles={styles.account} />
     </div>
   );
 };

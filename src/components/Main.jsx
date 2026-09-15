@@ -4,6 +4,7 @@ import styles from './Main.module.css';
 import Search from './Search';
 import Clubs from './Clubs';
 import NowPlaying from './NowPlaying';
+import Signup from './Signup';
 
 const Main = () => {
   return (
@@ -17,6 +18,7 @@ const Main = () => {
           <Route path="/clubs" element={<Clubs></Clubs>}></Route>
           <Route path="/clubs/:id" element={<p>single</p>}></Route>
           <Route path="/account"></Route>
+          <Route path="/signup" element={<Signup></Signup>}></Route>
         </Routes>
       </div>
     </div>
