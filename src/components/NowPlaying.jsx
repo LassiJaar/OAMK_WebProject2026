@@ -46,29 +46,7 @@ const NowPlaying = () => {
 
   return (
     <section className={styles.section} aria-labelledby="now-playing-title">
-      <div className={styles.headingRow}>
-        <h2 id="now-playing-title">Now Playing</h2>
-
-        {!loading && !error && movies.length > 0 && (
-          <div className={styles.controls}>
-            <button
-              type="button"
-              onClick={() => scroll(-1)}
-              aria-label="Show previous movies"
-            >
-              ‹
-            </button>
-
-            <button
-              type="button"
-              onClick={() => scroll(1)}
-              aria-label="Show more movies"
-            >
-              ›
-            </button>
-          </div>
-        )}
-      </div>
+      <h2 id="now-playing-title">Now Playing</h2>
 
       {loading && <p className={styles.message}>Loading movies...</p>}
 
@@ -85,10 +63,30 @@ const NowPlaying = () => {
       )}
 
       {!loading && !error && movies.length > 0 && (
-        <div className={styles.movies} ref={listRef}>
-          {movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
+        <div className={styles.carousel}>
+          <button
+            type="button"
+            className={styles.arrow}
+            onClick={() => scroll(-1)}
+            aria-label="Show previous movies"
+          >
+            ‹
+          </button>
+
+          <div className={styles.movies} ref={listRef}>
+            {movies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className={styles.arrow}
+            onClick={() => scroll(1)}
+            aria-label="Show more movies"
+          >
+            ›
+          </button>
         </div>
       )}
 

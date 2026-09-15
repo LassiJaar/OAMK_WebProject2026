@@ -1,29 +1,133 @@
-:root {
-  --gutter: 20px;
+.section {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.section h2 {
+  margin: 0 0 24px;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.arrow {
+  display: flex;
+  flex: 0 0 44px;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 64px;
+  padding: 0;
+
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+
+  font-size: 2rem;
+  line-height: 1;
+
+  box-shadow: var(--shadow-card);
+  transition:
+    color 0.2s,
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.arrow:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-hover);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.arrow:active {
+  transform: scale(0.97);
 }
 
 .movies {
   display: flex;
+  flex: 1;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 20px;
+  min-width: 0;
+  padding: 4px 0 18px;
   overflow-x: auto;
-  padding: 0 0 15px 0;
-  width: 100%;
-  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-background-light);
 }
 
-.title {
-  display: inline-block;
-  border-bottom: 10px solid grey;
+.movies::-webkit-scrollbar {
+  height: 8px;
 }
 
-.filters {
-  padding: 10px;
-  display: flex;
-  gap: 1rem;
+.movies::-webkit-scrollbar-track {
+  background: var(--color-background-light);
+  border-radius: 4px;
 }
 
-.filters button {
-  padding: 10px;
+.movies::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.movies::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+.message,
+.error {
+  padding: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  text-align: center;
+}
+
+.error {
+  color: #ffd9da;
+  background: rgb(229 107 111 / 10%);
+  border-color: rgb(229 107 111 / 40%);
+}
+
+.attribution {
+  margin: 12px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+@media (max-width: 700px) {
+  .section {
+    padding: 40px 16px;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+
+  .carousel {
+    gap: 8px;
+  }
+
+  .arrow {
+    flex-basis: 38px;
+    width: 38px;
+    height: 56px;
+    font-size: 1.7rem;
+  }
+
+  .movies {
+    gap: 14px;
+  }
 }
