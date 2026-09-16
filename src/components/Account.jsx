@@ -1,126 +1,59 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import styles from './Signin.module.css';
-
+import styles from './Account.module.css';
 
 const Account = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError('');
-    setSuccess(false);
-
-    const trimmedEmail = email.trim();
-
-    if (!trimmedEmail || !password) {
-      setError('Please fill in all fields.');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/accounts/signin`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            account: {
-              email: trimmedEmail,
-              password,
-            },
-          }),
-        }
-      );
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(data?.error?.message || 'Sign in failed.');
-      }
-
-      setSuccess(true);
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-    } catch (requestError) {
-      setError(
-        requestError.message || 'Something went wrong. Please try again later.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (success) {
-    return (
-      <section className={styles.container}>
-        <div className={styles.formCard}>
-          <h1>Sign in successful</h1>
-          <p className={styles.success}>
-            Welcome to MovieNight!
-          </p>
-          <Link className={styles.primaryLink} to="/">
-            Continue to Home
-          </Link>
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className={styles.container}>
-      <div className={styles.formCard}>
-        <h1>Sign in</h1>
-        <p className={styles.intro}>
-          Sign in to get the most out of MovieNight.
-        </p>
+    <div className={styles.pageWrapper}>
+        <h1 className={styles.pageTitle}>My account</h1>
+        
+        <section className={styles.container}>
+            <div className={styles.leftColumn}>
+                <div className={styles.profileCard}>
+                    <h1>My profile</h1>
+                    <p>Image here</p>
+                    <p>Username</p>
+                    <p className={styles.p1}>
+                        Member since 00.00.0000
+                    </p>
+                    <p className={styles.p1}>
+                        100 reviews * 100 favorites
+                    </p>
+                    <button>Edit profile</button>
+                </div>
 
-        {error && (
-          <p className={styles.error} role="alert">
-            {error}
-          </p>
-        )}
+                <div className={styles.statsCard}>
+                    <h1>Stats</h1>
+                    <p className={styles.stat}>Reviews 1</p>
+                    <p className={styles.stat}>Favorites 1</p>
+                    <p className={styles.stat}>Groups 1</p>
+                    <p className={styles.stat}>Followers 1</p>
+                    <p className={styles.stat}>Following 1</p>
+                </div>
 
-        <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="signin-email">Email</label>
-          <input
-            id="signin-email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            required
-          />
+                <div className={styles.settingsCard}>
+                    <h1>Account settings</h1>
+                    <button>Change password</button>
+                    <button className={styles.deleteBtn}>Delete account</button>
+                </div>
+            </div>
 
-          <label htmlFor="signin-password">Password</label>
-          <input
-            id="signin-password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete="new-password"
-            required
-          />
+            <div className={styles.rightColumn}>
+                <div className={styles.reviewCard}>
+                    <h1>Recent Reviews</h1>
+                    <p>Review X</p>
+                    <p>Review X</p>
+                    <p>Review X</p>
+                </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
-          </button>
-        </form>
-
-        <p className={styles.signInText}>
-          Don't have an account? <Link to="/signup">Sign up</Link>
-        </p>
-      </div>
-    </section>
+                <div className={styles.favoritesCard}>
+                    <h1>Favorites List</h1>
+                    <p>Movie1</p>
+                </div>
+            </div>
+        
+        </section>
+    </div>
   );
 };
 

@@ -1,0 +1,125 @@
+.pageWrapper {
+  max-width: 1470px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.pageTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-top: 40px;
+  margin-bottom: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px 0 60px;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1 1 480px;
+  max-width: 480px;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 2 1 960px;
+  max-width: 960px;
+}
+
+.profileCard,
+.statsCard,
+.settingsCard,
+.reviewCard,
+.favoritesCard {
+  width: 100%;
+  padding: 36px;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e0e0e0);
+  border-radius: var(--radius-large, 12px);
+  box-shadow: var(--shadow-card, 0 4px 6px rgba(0,0,0,0.05));
+  box-sizing: border-box;
+}
+
+.profileCard h1,
+.statsCard h1,
+.settingsCard h1,
+.reviewCard h1,
+.favoritesCard h1 {
+  margin: 0 0 20px;
+  text-align: left;
+  font-size: 1.8rem;
+}
+
+.profileCard button,
+.settingsCard button,
+.favoritesCard button {
+  padding: 12px 18px;
+  margin-top: 8px;
+  color: #17130d;
+  background: var(--color-primary, #f0f0f0);
+  border: 0;
+  border-radius: var(--radius-small, 6px);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.profileCard button:hover,
+.settingsCard button:hover,
+.favoritesCard button:hover {
+  background: var(--color-primary-hover, #e0e0e0);
+}
+
+.settingsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settingsCard button {
+  margin-top: 0;
+}
+
+.p1 {
+  margin: 0 0 10px;
+  color: var(--color-text-muted, #666);
+  font-size: 0.85rem;
+}
+
+.stat {
+  margin: 0 0 12px;
+  text-decoration-line: underline;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 960px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+  }
+
+  .left-column,
+  .right-column {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .profileCard,
+  .statsCard,
+  .settingsCard,
+  .reviewCard,
+  .favoritesCard {
+    padding: 24px 20px;
+    border-radius: var(--radius-medium, 8px);
+  }
+}
