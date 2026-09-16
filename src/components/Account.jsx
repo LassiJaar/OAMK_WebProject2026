@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import styles from './Signup.module.css';
+import styles from './Signin.module.css';
 
 
-const Signin = () => {
+const Account = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -124,4 +124,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Account;
