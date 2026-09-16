@@ -1,4 +1,26 @@
-.TopbarTab p:not(:last-child) {
-  border-right: 1px solid black;
-  padding-right: 1rem;
+.link {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 9px 14px;
+
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-small);
+
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+
+.link:hover {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.active {
+  color: var(--color-primary);
+  background: rgb(232 168 78 / 10%);
 }
