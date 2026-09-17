@@ -2,8 +2,10 @@ import { compare, hash } from 'bcrypt';
 import {
   deleteAccount,
   getAccountByEmail,
+  getAccountById,
   insertAccount,
   selectAccountStatistics,
+  updatePassword,
 } from '../models/Account.js';
 import jwt from 'jsonwebtoken';
 const { sign } = jwt;
@@ -80,4 +82,35 @@ const getAccountStatistics = async (req, res, next) => {
   }
 };
 
-export { createAccount, removeAccount, login, getAccountStatistics };
+const patchPassword = async (req, res, next) => {
+  const { id } = req.params;
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+  if (req.account?.account_id != id) {
+    const error = new Error('You can only change your own password');
+    error.status = 403;
+    return next(error);
+  }
+  try {
+    const result = await getAccountById(id);
+    const account = result.rows[0];
+    if (!account || !(await compare(oldPassword, account.password))) {
+      const error = new Error('Invalid password');
+      error.status = 401;
+      return next(error);
+    }
+    const hashedPassword = await hash(newPassword, 10);
+    await updatePassword(id, hashedPassword);
+    return res.status(204).end();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export {
+  createAccount,
+  removeAccount,
+  login,
+  getAccountStatistics,
+  patchPassword,
+};

@@ -7,6 +7,14 @@ const getAccountByEmail = async (email) => {
   return result;
 };
 
+const getAccountById = async (id) => {
+  const result = await pool.query(
+    'SELECT * FROM account WHERE account_id = $1',
+    [id]
+  );
+  return result;
+};
+
 const insertAccount = async (email, password) => {
   const result = await pool.query(
     'INSERT INTO account (email, password) VALUES ($1, $2) RETURNING account_id, email',
@@ -39,9 +47,19 @@ const selectAccountStatistics = async (id) => {
   return result;
 };
 
+const updatePassword = async (id, password) => {
+  const result = await pool.query(
+    'UPDATE account SET password = $1 WHERE account_id = $2',
+    [password, id]
+  );
+  return result;
+};
+
 export {
   getAccountByEmail,
+  getAccountById,
   insertAccount,
   deleteAccount,
   selectAccountStatistics,
+  updatePassword,
 };
