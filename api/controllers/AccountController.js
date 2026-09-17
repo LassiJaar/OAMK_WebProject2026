@@ -3,6 +3,7 @@ import {
   deleteAccount,
   getAccountByEmail,
   insertAccount,
+  selectAccountStatistics,
 } from '../models/Account.js';
 import jwt from 'jsonwebtoken';
 const { sign } = jwt;
@@ -69,4 +70,14 @@ const login = async (req, res, next) => {
   }
 };
 
-export { createAccount, removeAccount, login };
+const getAccountStatistics = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const result = await selectAccountStatistics(id);
+    return res.status(200).json(result.rows[0]);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export { createAccount, removeAccount, login, getAccountStatistics };

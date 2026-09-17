@@ -22,4 +22,26 @@ const deleteAccount = async (id) => {
   return result;
 };
 
-export { getAccountByEmail, insertAccount, deleteAccount };
+const selectAccountStatistics = async (id) => {
+  const result = await pool.query(
+    `
+    SELECT 
+      a.account_id,
+      a.email,
+      a.created_at,
+      (SELECT COUNT(*) FROM review r WHERE r.account_id=a.account_id) as total_reviews,
+      (SELECT COUNT(*) FROM favorite f WHERE f.account_id=a.account_id) AS total_favorites,
+      (SELECT COUNT(*) FROM club_account ca WHERE ca.account_id=a.account_id AND ca.role!='pending') AS total_clubs
+    FROM account a
+    WHERE a.account_id=$1;`,
+    [id]
+  );
+  return result;
+};
+
+export {
+  getAccountByEmail,
+  insertAccount,
+  deleteAccount,
+  selectAccountStatistics,
+};
