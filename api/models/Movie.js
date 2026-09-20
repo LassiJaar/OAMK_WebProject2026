@@ -103,4 +103,45 @@ const getNowPlayingMovies = async () => {
   }));
 };
 
-export { searchMovies, getNowPlayingMovies };
+const getMovieById = async (id) => {
+  const token = process.env.TMDB_TOKEN;
+
+  if (!token) {
+    const error = new Error('TMDB_TOKEN is not configured.');
+    error.status = 500;
+    throw error;
+  }
+
+  const response = await fetch(`${TMDB_BASE_URL}/movie/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    const error = new Error(
+      `TMDB request failed with status ${response.status}. ${details}`
+    );
+    error.status = response.status >= 500 ? 502 : response.status;
+    throw error;
+  }
+
+  const movie = await response.json();
+  return {
+    id: movie.id,
+    title: movie.title,
+    originalTitle: movie.original_title,
+    posterPath: movie.poster_path,
+    backdropPath: movie.backdrop_path,
+    releaseDate: movie.release_date,
+    overview: movie.overview,
+    rating: movie.vote_average,
+    runtime: movie.runtime,
+    genres: movie.genres?.map((genre) => genre.name) ?? [],
+    tagline: movie.tagline,
+  };
+};
+
+export { searchMovies, getNowPlayingMovies, getMovieById };
