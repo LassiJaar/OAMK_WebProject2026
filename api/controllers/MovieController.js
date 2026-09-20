@@ -1,4 +1,4 @@
-import { searchMovies, getNowPlayingMovies } from '../models/Movie.js';
+import { searchMovies, getNowPlayingMovies, getMovieById } from '../models/Movie.js';
 
 const getMovies = async (req, res, next) => {
   const { query, genre, minYear, maxYear, rating } = req.query;
@@ -30,4 +30,19 @@ const getNowPlaying = async (req, res, next) => {
   }
 };
 
-export { getMovies, getNowPlaying };
+const getMovie = async (req, res, next) => {
+  const movieId = Number(req.params.id);
+
+  if (!Number.isInteger(movieId) || movieId <= 0) {
+    return res.status(400).json({ error: { message: 'A valid movie id is required', status: 400 } });
+  }
+
+  try {
+    const movie = await getMovieById(movieId);
+    res.status(200).json(movie);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { getMovies, getNowPlaying, getMovie };
