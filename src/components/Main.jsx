@@ -8,6 +8,7 @@ import Signup from './Signup';
 import Signin from './Signin';
 import Account from './Account';
 import MovieDetail from './MovieDetail';
+import ProtectedRoute from './ProtectedRoute';
 
 const Main = () => {
   return (
@@ -21,9 +22,11 @@ const Main = () => {
           <Route path="/movie/:id" element={<MovieDetail></MovieDetail>}></Route>
           <Route path="/clubs" element={<Clubs></Clubs>}></Route>
           <Route path="/clubs/:id" element={<p>single</p>}></Route>
-          <Route path="/account" element={<Account></Account>}></Route>
           <Route path="/signup" element={<Signup></Signup>}></Route>
           <Route path="/signin" element={<Signin></Signin>}></Route>
+          <Route element={<ProtectedRoute></ProtectedRoute>}>
+            <Route path="/account" element={<Account></Account>}></Route>
+          </Route>
         </Routes>
       </div>
     </div>

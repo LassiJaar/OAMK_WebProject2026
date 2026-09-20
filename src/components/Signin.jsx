@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import styles from './Signup.module.css';
-
+import { useAccount } from '../context/useAccount';
 
 const Signin = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +9,7 @@ const Signin = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { signIn } = useAccount();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,35 +26,15 @@ const Signin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/accounts/signin`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            account: {
-              email: trimmedEmail,
-              password,
-            },
-          }),
-        }
-      );
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(data?.error?.message || 'Sign in failed.');
-      }
+      await signIn({ email: trimmedEmail, password });
 
       setSuccess(true);
       setEmail('');
       setPassword('');
-      setConfirmPassword('');
     } catch (requestError) {
       setError(
-        requestError.message || 'Something went wrong. Please try again later.'
+        requestError?.response?.data?.error?.message ||
+          'Something went wrong. Please try again later.'
       );
     } finally {
       setLoading(false);
@@ -65,9 +46,7 @@ const Signin = () => {
       <section className={styles.container}>
         <div className={styles.formCard}>
           <h1>Sign in successful</h1>
-          <p className={styles.success}>
-            Welcome to MovieNight!
-          </p>
+          <p className={styles.success}>Welcome to MovieNight!</p>
           <Link className={styles.primaryLink} to="/">
             Continue to Home
           </Link>
