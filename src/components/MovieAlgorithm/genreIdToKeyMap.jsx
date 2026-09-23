@@ -1,0 +1,21 @@
+export const genreIdToKeyMap = {
+  28: 'Action28',
+  12: 'Adventure12',
+  16: 'Animation16',
+  35: 'Comedy35',
+  80: 'Crime80',
+  99: 'Documentary99',
+  18: 'Drama18',
+  10751: 'Family10751',
+  14: 'Fantasy14',
+  36: 'History36',
+  27: 'Horror27',
+  10402: 'Music10402',
+  9648: 'Mystery9648',
+  10749: 'Romance10749',
+  878: 'SciFi878',
+  10770: 'TV10770',
+  53: 'Thriller53',
+  10752: 'War10752',
+  37: 'Western37'
+};

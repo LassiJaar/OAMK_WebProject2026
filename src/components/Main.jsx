@@ -3,7 +3,7 @@ import Topbar from './Topbar';
 import styles from './Main.module.css';
 import Search from './Search';
 import Clubs from './Clubs';
-import NowPlaying from './NowPlaying';
+import HomeView from './HomeView';
 import Signup from './Signup';
 import Signin from './Signin';
 import Account from './Account';
@@ -17,7 +17,7 @@ const Main = () => {
 
       <div className={styles.content}>
         <Routes>
-          <Route path="/" element={<NowPlaying></NowPlaying>}></Route>
+          <Route path="/" element={<HomeView></HomeView>}></Route>
           <Route path="/search" element={<Search></Search>}></Route>
           <Route path="/movie/:id" element={<MovieDetail></MovieDetail>}></Route>
           <Route path="/clubs" element={<Clubs></Clubs>}></Route>

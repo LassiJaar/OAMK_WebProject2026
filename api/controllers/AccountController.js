@@ -6,6 +6,7 @@ import {
   insertAccount,
   selectAccountStatistics,
   updatePassword,
+  updateAccountPreferences,
 } from '../models/Account.js';
 import jwt from 'jsonwebtoken';
 const { sign } = jwt;
@@ -66,7 +67,7 @@ const login = async (req, res, next) => {
     );
     return res
       .status(200)
-      .json({ account_id: account.account_id, email: account.email, token });
+      .json({ account_id: account.account_id, email: account.email, token, preferences: account.preferences });
   } catch (error) {
     return next(error);
   }
@@ -107,10 +108,54 @@ const patchPassword = async (req, res, next) => {
   }
 };
 
+const updatePreferences = async (req, res, next) => {
+  const { genreIds, rating } = req.body;
+  const accountId = req.account?.account_id;
+
+  if (!Array.isArray(genreIds) || genreIds.length === 0 || rating === undefined) {
+    const error = new Error('genreIds array and rating are required');
+    error.status = 400;
+    return next(error);
+  }
+
+  const numericRating = Number(rating);
+  if (isNaN(numericRating) || numericRating < 0 || numericRating > 5) {
+    const error = new Error('Rating must be a number between 0 and 5');
+    error.status = 400;
+    return next(error);
+  }
+
+  const alpha = 0.1;
+  const reward = (numericRating - 2.5) / 2.5;
+
+  try {
+    const jsonTarget = {};
+    genreIds.forEach((id) => {
+      jsonTarget[String(id)] = reward;
+    });
+
+    const result = await updateAccountPreferences(accountId, JSON.stringify(jsonTarget));
+    
+    if (result.rowCount === 0) {
+      const error = new Error('Account not found');
+      error.status = 404;
+      return next(error);
+    }
+
+    return res.status(200).json({
+      success: true,
+      preferences: result.rows[0].preferences
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createAccount,
   removeAccount,
   login,
   getAccountStatistics,
   patchPassword,
+  updatePreferences,
 };

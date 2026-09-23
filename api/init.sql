@@ -14,6 +14,12 @@ CREATE TABLE IF NOT EXISTS account (
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  preferences JSONB NOT NULL DEFAULT '{
+    "Action28": 0.5, "Abenteuer12": 0.5, "Animation16": 0.5, "Komödie35": 0.5, "Krimi80": 0.5, 
+    "Dokumentarfilm99": 0.5, "Drama18": 0.5, "Familie10751": 0.5, "Fantasy14": 0.5, "Historie36": 0.5, 
+    "Horror27": 0.5, "Musik10402": 0.5, "Mystery9648": 0.5, "Liebesfilm10749": 0.5, "Science Fiction878": 0.5, 
+    "TV-Film10770": 0.5, "Thriller53": 0.5, "Kriegsfilm10752": 0.5, "Western37": 0.5
+  }'::jsonb
 );
 
 CREATE TABLE IF NOT EXISTS movie (
