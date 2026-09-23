@@ -23,10 +23,14 @@ const AccountProvider = ({ children }) => {
     setAccount(response.data);
     sessionStorage.setItem('account', JSON.stringify(response.data));
     sessionStorage.setItem('token', response.data.token);
+    if (response.data.preferences) {
+      sessionStorage.setItem('user_preferences', JSON.stringify(response.data.preferences));
+    }
   };
   const signOut = async () => {
     sessionStorage.removeItem('account');
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user_preferences'); 
     setAccount(null);
   };
   return (

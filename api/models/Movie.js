@@ -144,4 +144,57 @@ const getMovieById = async (id) => {
   };
 };
 
-export { searchMovies, getNowPlayingMovies, getMovieById };
+const getRecommendationPool = async () => {
+  const token = process.env.TMDB_TOKEN;
+
+  if (!token) {
+    const error = new Error('TMDB_TOKEN is not configured.');
+    error.status = 500;
+    throw error;
+  }
+
+  const endpoints = ['popular', 'upcoming', 'top_rated'];
+
+  const fetchPromises = endpoints.map(async (endpoint) => {
+    const url = new URL(`${TMDB_BASE_URL}/movie/${endpoint}`);
+    url.searchParams.set('language', 'fi-FI');
+    url.searchParams.set('page', '1');
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        accept: 'application/json',
+      },
+    });
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    return data.results ?? [];
+  });
+
+  const resultsArray = await Promise.all(fetchPromises);
+  
+  const combinedMovies = resultsArray.flat();
+
+  const uniqueMoviesMap = new Map();
+  combinedMovies.forEach((movie) => {
+    if (movie && movie.id) {
+      uniqueMoviesMap.set(movie.id, movie);
+    }
+  });
+
+  return Array.from(uniqueMoviesMap.values()).map((movie) => ({
+    id: movie.id,
+    title: movie.title,
+    originalTitle: movie.original_title,
+    posterPath: movie.poster_path,
+    backdropPath: movie.backdrop_path,
+    releaseDate: movie.release_date,
+    overview: movie.overview,
+    rating: movie.vote_average,
+    genre_ids: movie.genre_ids,
+  }));
+};
+
+export { searchMovies, getNowPlayingMovies, getMovieById, getRecommendationPool };

@@ -20,7 +20,7 @@ app.use('/', testRouter);
 app.use('/clubs', clubRouter);
 app.use('/accounts', accountRouter);
 app.use('/movies', movieRouter);
-app.use('/', reviewRouter);
+app.use('/movies', reviewRouter);
 
 // Health check endpoint for database connectivity
 app.get('/api/health', async (req, res) => {

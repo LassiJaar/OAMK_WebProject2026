@@ -10,8 +10,8 @@ import { auth } from '../helper/auth.js';
 const router = Router();
 
 router.get('/accounts/:id/reviews', getLatestReviewsByAccount);
-router.get('/movies/:movie_id/reviews', getReviewsByMovie);
-router.post('/movies/:movie_id/reviews', auth, createReview);
-router.delete('/movies/:movie_id/reviews/:account_id', auth, removeReview);
+router.get('/:movie_id/reviews', getReviewsByMovie);
+router.post('/:movie_id/reviews', auth, createReview);
+router.delete('/:movie_id/reviews/:account_id', auth, removeReview);
 
 export default router;

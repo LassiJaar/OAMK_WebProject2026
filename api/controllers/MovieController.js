@@ -1,4 +1,4 @@
-import { searchMovies, getNowPlayingMovies, getMovieById } from '../models/Movie.js';
+import { searchMovies, getNowPlayingMovies, getMovieById, getRecommendationPool } from '../models/Movie.js';
 
 const getMovies = async (req, res, next) => {
   const { query, genre, minYear, maxYear, rating } = req.query;
@@ -45,4 +45,13 @@ const getMovie = async (req, res, next) => {
   }
 };
 
-export { getMovies, getNowPlaying, getMovie };
+const getRecommendations = async (req, res, next) => {
+  try {
+    const movies = await getRecommendationPool();
+    res.status(200).json(movies);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { getMovies, getNowPlaying, getMovie, getRecommendations };

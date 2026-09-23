@@ -28,12 +28,23 @@ const getReviewsByMovie = async (req, res, next) => {
 };
 
 const createReview = async (req, res, next) => {
-  const { movie_id } = req.params;
-  const account_id = req.account.account_id;
-  const { rating, text } = req.body;
+  const movieId = Number(req.params.movie_id);
+  const { rating, text, movieTitle } = req.body;
+  const accountId = req.account?.account_id;
+
+  if (!movieId || rating === undefined || !movieTitle || !movieTitle.trim()) {
+    const error = new Error('A valid movie id, title, and rating are required');
+    error.status = 400;
+    return next(error);
+  }
+
   try {
-    const result = await insertReview(movie_id, account_id, rating, text);
-    return res.status(200).json(result.rows[0]);
+    const result = await insertReview(accountId, movieId, movieTitle.trim(), rating, text);
+    
+    return res.status(201).json({ 
+      success: true, 
+      review: result.rows[0] 
+    });
   } catch (error) {
     next(error);
   }
