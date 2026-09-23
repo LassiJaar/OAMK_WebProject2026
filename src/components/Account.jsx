@@ -10,13 +10,19 @@ import Modal from './Modal';
 const Account = () => {
   const [passwordModal, setPasswordModal] = useState(false);
   const [stats, setStats] = useState(null);
-  const [recentReviews, setRecentReviews] = useState(null);
+  const [recentReviews, setRecentReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const { account, signOut } = useAccount();
 
   const fetchData = async () => {
+    if (!account || !account.account_id) {
+    setError("User session not found. Please log in again.");
+    setLoading(false);
+    return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -25,10 +31,10 @@ const Account = () => {
         `${import.meta.env.VITE_API_URL}/accounts/${account.account_id}`
       );
       const reviewResult = await api.get(
-        `${import.meta.env.VITE_API_URL}/accounts/${account.account_id}/reviews`
+        `${import.meta.env.VITE_API_URL}/movies/accounts/${account.account_id}/reviews`
       );
       setStats(response.data);
-      setRecentReviews(reviewResult.data);
+      setRecentReviews(Array.isArray(reviewResult.data) ? reviewResult.data : []);
     } catch (err) {
       console.log(err);
       setError(err.message);
@@ -49,68 +55,86 @@ const Account = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (account?.account_id) {
+      fetchData();
+    }
+  }, [account]);
+
+  if (loading) {
+    return <div className={styles.message}>Loading account details...</div>;
+  }
+
+  if (error || !stats) {
+    return (
+      <div className={styles.message}>
+        <p className={styles.error}>Error loading profile: {error || 'No data available'}</p>
+        <button onClick={fetchData}>Retry</button>
+      </div>
+    );
+  }
+
+  const releaseDateStr = stats.created_at ? stats.created_at.slice(0, 10) : '';
 
   return (
     <div className={styles.pageWrapper}>
       <h1 className={styles.pageTitle}>My account</h1>
-      {!loading && (
-        <section className={styles.container}>
-          <div className={styles.leftColumn}>
-            <div className={styles.profileCard}>
-              <h1>My profile</h1>
-              <p>Image here</p>
-              <p>Username</p>
-              <p className={styles.p1}>
-                Member since {stats.created_at.slice(0, 10)}
-              </p>
-              <p className={styles.p1}>
-                {stats.total_reviews} reviews * {stats.total_favorites}{' '}
-                favorites
-              </p>
-              <button>Edit profile</button>
-            </div>
-
-            <div className={styles.statsCard}>
-              <h1>Stats</h1>
-              <p className={styles.stat}>Reviews {stats.total_reviews}</p>
-              <p className={styles.stat}>Favorites {stats.total_favorites}</p>
-              <p className={styles.stat}>Clubs {stats.total_clubs}</p>
-            </div>
-
-            <div className={styles.settingsCard}>
-              <h1>Account settings</h1>
-              <button onClick={() => setPasswordModal(true)}>
-                Change password
-              </button>
-              {passwordModal && (
-                <Modal setModal={setPasswordModal}>
-                  <ChangePassword></ChangePassword>
-                </Modal>
-              )}
-              <button onClick={signOut}>Sign Out</button>
-              <button onClick={deleteAccount} className={styles.deleteBtn}>
-                Delete account
-              </button>
-            </div>
+      <section className={styles.container}>
+        <div className={styles.leftColumn}>
+          <div className={styles.profileCard}>
+            <h1>My profile</h1>
+            <p>Image here</p>
+            <p>Username</p>
+            <p className={styles.p1}>
+              Member since {releaseDateStr}
+            </p>
+            <p className={styles.p1}>
+              {stats.total_reviews} reviews * {stats.total_favorites} favorites
+            </p>
+            <button>Edit profile</button>
           </div>
 
-          <div className={styles.rightColumn}>
-            <div className={styles.reviewCard}>
-              <h1>Recent Reviews</h1>
-              {recentReviews.map((r) => (
+          <div className={styles.statsCard}>
+            <h1>Stats</h1>
+            <p className={styles.stat}>Reviews {stats.total_reviews}</p>
+            <p className={styles.stat}>Favorites {stats.total_favorites}</p>
+            <p className={styles.stat}>Clubs {stats.total_clubs}</p>
+          </div>
+
+          <div className={styles.settingsCard}>
+            <h1>Account settings</h1>
+            <button onClick={() => setPasswordModal(true)}>
+              Change password
+            </button>
+            {passwordModal && (
+              <Modal setModal={setPasswordModal}>
+                <ChangePassword></ChangePassword>
+              </Modal>
+            )}
+            <button onClick={signOut}>Sign Out</button>
+            <button onClick={deleteAccount} className={styles.deleteBtn}>
+              Delete account
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.rightColumn}>
+          <div className={styles.reviewCard}>
+            <h1>Recent Reviews</h1>
+            {recentReviews.length > 0 ? (
+              recentReviews.map((r) => (
                 <AccountReview key={r.movie_id} review={r}></AccountReview>
-              ))}
-            </div>
-
-            <div className={styles.favoritesCard}>
-              <h1>Favorites List</h1>
-              <p>Movie1</p>
-            </div>
+              ))
+            ) : (
+              <p>No reviews yet.</p>
+            )}
           </div>
-        </section>
-      )}
+
+          <div className={styles.favoritesCard}>
+            <h1>Favorites List</h1>
+            <p>Movie1</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

@@ -28,5 +28,4 @@ const randomizeSR = (sr, intensity = 0.05) => {
   return Math.round(clamped * 100) / 100;
 };
 
-
 export { calculateSR, randomizeSR }

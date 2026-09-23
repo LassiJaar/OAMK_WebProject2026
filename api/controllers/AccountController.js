@@ -9,6 +9,7 @@ import {
   updateAccountPreferences,
 } from '../models/Account.js';
 import jwt from 'jsonwebtoken';
+import { genreIdToKeyMap } from '../helper/genreIdToKeyMap.js';
 const { sign } = jwt;
 
 const createAccount = async (req, res, next) => {
@@ -131,10 +132,13 @@ const updatePreferences = async (req, res, next) => {
   try {
     const jsonTarget = {};
     genreIds.forEach((id) => {
-      jsonTarget[String(id)] = reward;
+      const genreKey = genreIdToKeyMap[Number(id)];
+      if (genreKey) {
+        jsonTarget[genreKey] = reward;
+      }
     });
 
-    const result = await updateAccountPreferences(accountId, JSON.stringify(jsonTarget));
+    const result = await updateAccountPreferences(accountId, JSON.stringify(jsonTarget), alpha);
     
     if (result.rowCount === 0) {
       const error = new Error('Account not found');
