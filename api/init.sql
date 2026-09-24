@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS club (
   club_id SERIAL PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
   description TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  image_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS club_movie (

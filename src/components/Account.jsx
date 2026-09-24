@@ -18,9 +18,9 @@ const Account = () => {
 
   const fetchData = async () => {
     if (!account || !account.account_id) {
-    setError("User session not found. Please log in again.");
-    setLoading(false);
-    return;
+      setError('User session not found. Please log in again.');
+      setLoading(false);
+      return;
     }
 
     setLoading(true);
@@ -34,7 +34,9 @@ const Account = () => {
         `${import.meta.env.VITE_API_URL}/movies/accounts/${account.account_id}/reviews`
       );
       setStats(response.data);
-      setRecentReviews(Array.isArray(reviewResult.data) ? reviewResult.data : []);
+      setRecentReviews(
+        Array.isArray(reviewResult.data) ? reviewResult.data : []
+      );
     } catch (err) {
       console.log(err);
       setError(err.message);
@@ -67,7 +69,9 @@ const Account = () => {
   if (error || !stats) {
     return (
       <div className={styles.message}>
-        <p className={styles.error}>Error loading profile: {error || 'No data available'}</p>
+        <p className={styles.error}>
+          Error loading profile: {error || 'No data available'}
+        </p>
         <button onClick={fetchData}>Retry</button>
       </div>
     );
@@ -84,9 +88,7 @@ const Account = () => {
             <h1>My profile</h1>
             <p>Image here</p>
             <p>Username</p>
-            <p className={styles.p1}>
-              Member since {releaseDateStr}
-            </p>
+            <p className={styles.p1}>Member since {releaseDateStr}</p>
             <p className={styles.p1}>
               {stats.total_reviews} reviews * {stats.total_favorites} favorites
             </p>
@@ -131,7 +133,15 @@ const Account = () => {
 
           <div className={styles.favoritesCard}>
             <h1>Favorites List</h1>
-            <p>Movie1</p>
+
+            <p>
+              You have {stats.total_favorites} favorite
+              {stats.total_favorites !== 1 ? 's' : ''}.
+            </p>
+
+            <Link to={`/favourites/${account.account_id}`}>
+              View my favourites
+            </Link>
           </div>
         </div>
       </section>

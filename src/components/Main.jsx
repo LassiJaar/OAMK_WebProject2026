@@ -8,6 +8,7 @@ import Signup from './Signup';
 import Signin from './Signin';
 import Account from './Account';
 import MovieDetail from './MovieDetail';
+import Favorites from './Favourites';
 import ProtectedRoute from './ProtectedRoute';
 
 const Main = () => {
@@ -19,11 +20,15 @@ const Main = () => {
         <Routes>
           <Route path="/" element={<HomeView></HomeView>}></Route>
           <Route path="/search" element={<Search></Search>}></Route>
-          <Route path="/movie/:id" element={<MovieDetail></MovieDetail>}></Route>
+          <Route
+            path="/movie/:id"
+            element={<MovieDetail></MovieDetail>}
+          ></Route>
           <Route path="/clubs" element={<Clubs></Clubs>}></Route>
           <Route path="/clubs/:id" element={<p>single</p>}></Route>
           <Route path="/signup" element={<Signup></Signup>}></Route>
           <Route path="/signin" element={<Signin></Signin>}></Route>
+          <Route path="/favourites/:id" element={<Favorites></Favorites>}></Route>
           <Route element={<ProtectedRoute></ProtectedRoute>}>
             <Route path="/account" element={<Account></Account>}></Route>
           </Route>

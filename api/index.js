@@ -7,6 +7,7 @@ import clubRouter from './routes/clubRouter.js';
 import accountRouter from './routes/accountRouter.js';
 import movieRouter from './routes/movieRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
+import favoriteRouter from './routes/favoriteRouter.js';
 
 const port = process.env.PORT || 3000;
 
@@ -21,6 +22,7 @@ app.use('/clubs', clubRouter);
 app.use('/accounts', accountRouter);
 app.use('/movies', movieRouter);
 app.use('/movies', reviewRouter);
+app.use('/movies', favoriteRouter);
 
 // Health check endpoint for database connectivity
 app.get('/api/health', async (req, res) => {
