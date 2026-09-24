@@ -19,7 +19,13 @@ const selectReviewsByMovie = async (id, amount, sort, order) => {
   return result;
 };
 
-const insertReview = async (account_id, movie_id, movie_title, rating, text) => {
+const insertReview = async (
+  account_id,
+  movie_id,
+  movie_title,
+  rating,
+  text
+) => {
   const movieQuery = `
     INSERT INTO movie (movie_id, title, created_at)
     VALUES ($1, $2, NOW())

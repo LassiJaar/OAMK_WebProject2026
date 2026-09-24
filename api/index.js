@@ -7,6 +7,7 @@ import clubRouter from './routes/clubRouter.js';
 import accountRouter from './routes/accountRouter.js';
 import movieRouter from './routes/movieRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
+import clubAccountRouter from './routes/clubAccountRouter.js';
 
 const port = process.env.PORT || 3000;
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', testRouter);
 app.use('/clubs', clubRouter);
+app.use('/clubs/:club_id', clubAccountRouter);
 app.use('/accounts', accountRouter);
 app.use('/movies', movieRouter);
 app.use('/movies', reviewRouter);

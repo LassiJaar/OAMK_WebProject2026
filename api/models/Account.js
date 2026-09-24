@@ -17,10 +17,25 @@ const getAccountById = async (id) => {
 
 const insertAccount = async (email, password) => {
   const defaultPrefs = JSON.stringify({
-    "Action28": 0.5, "Adventure12": 0.5, "Animation16": 0.5, "Comedy35": 0.5, "Crime80": 0.5, 
-    "Documentary99": 0.5, "Drama18": 0.5, "Family10751": 0.5, "Fantasy14": 0.5, "History36": 0.5, 
-    "Horror27": 0.5, "Music10402": 0.5, "Mystery9648": 0.5, "Romance10749": 0.5, "SciFi878": 0.5, 
-    "TV10770": 0.5, "Thriller53": 0.5, "War10752": 0.5, "Western37": 0.5
+    Action28: 0.5,
+    Adventure12: 0.5,
+    Animation16: 0.5,
+    Comedy35: 0.5,
+    Crime80: 0.5,
+    Documentary99: 0.5,
+    Drama18: 0.5,
+    Family10751: 0.5,
+    Fantasy14: 0.5,
+    History36: 0.5,
+    Horror27: 0.5,
+    Music10402: 0.5,
+    Mystery9648: 0.5,
+    Romance10749: 0.5,
+    SciFi878: 0.5,
+    TV10770: 0.5,
+    Thriller53: 0.5,
+    War10752: 0.5,
+    Western37: 0.5,
   });
 
   const result = await pool.query(
@@ -50,7 +65,7 @@ const updateAccountPreferences = async (id, jsonTarget, alpha) => {
     WHERE account_id = $1
     RETURNING preferences;
   `;
-  
+
   const result = await pool.query(query, [id, jsonTarget, alpha]);
   return result;
 };
