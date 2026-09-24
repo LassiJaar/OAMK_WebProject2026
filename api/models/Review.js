@@ -36,11 +36,13 @@ const insertReview = async (
   const query = `
     INSERT INTO review (movie_id, account_id, rating, text)
     VALUES ($2, $1, $3, $4)
-    ON CONFLICT (movie_id, account_id) 
+    ON CONFLICT (movie_id, account_id)
     DO UPDATE SET rating = $3, text = $4, created_at = NOW()
     RETURNING *;
   `;
+
   const result = await pool.query(query, [account_id, movie_id, rating, text]);
+
   return result;
 };
 

@@ -1,0 +1,141 @@
+.page {
+  width: min(100%, 960px);
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+.page h1 {
+  margin: 0 0 40px;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.actions button,
+.remove {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 8px 14px;
+}
+
+.actions button:hover,
+.remove:hover {
+  background: var(--color-surface-hover);
+}
+
+.list {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 150px;
+  padding: 22px 24px;
+}
+
+.item + .item {
+  border-top: 1px solid var(--color-border);
+}
+
+.number {
+  width: 30px;
+  flex: 0 0 30px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.poster {
+  width: 102px;
+  height: 125px;
+  flex: 0 0 102px;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  background: var(--color-background-light);
+}
+
+.info {
+  flex: 1;
+}
+
+.info h2 {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.info p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.remove {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.empty {
+  margin: 0;
+  padding: 50px 20px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 30px 12px 40px;
+  }
+
+  .page h1 {
+    font-size: 1.6rem;
+    margin-bottom: 28px;
+  }
+
+  .actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .item {
+    gap: 12px;
+    padding: 16px 12px;
+  }
+
+  .number {
+    width: 20px;
+    flex-basis: 20px;
+  }
+
+  .poster {
+    width: 72px;
+    height: 100px;
+    flex-basis: 72px;
+  }
+
+  .info h2 {
+    font-size: 1rem;
+  }
+
+  .remove {
+    width: 40px;
+    height: 40px;
+  }
+}
