@@ -2,6 +2,7 @@ import {
   deleteReview,
   insertReview,
   selectLatestReviewsByAccount,
+  selectMovieReviewSummary,
   selectReviewsByMovie,
 } from '../models/Review.js';
 
@@ -18,10 +19,16 @@ const getLatestReviewsByAccount = async (req, res, next) => {
 
 const getReviewsByMovie = async (req, res, next) => {
   const { movie_id } = req.params;
-  const amount = req.body?.amount ? req.body?.amount : 5;
   try {
-    const result = await selectReviewsByMovie(movie_id, amount);
-    res.status(200).json(result.rows);
+    const [reviewsResult, summary] = await Promise.all([
+      selectReviewsByMovie(movie_id),
+      selectMovieReviewSummary(movie_id),
+    ]);
+    res.status(200).json({
+      reviews: reviewsResult.rows,
+      averageRating: Number(summary.average_rating),
+      reviewCount: summary.review_count,
+    });
   } catch (error) {
     next(error);
   }

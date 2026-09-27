@@ -13,10 +13,31 @@ const selectReviewsByMovie = async (id, amount, sort, order) => {
   const orders = ['ASC', 'DESC'];
   const sortColumn = sorts.includes(sort) ? sort : 'created_at';
   const orderDirection = orders.includes(order) ? order : 'DESC';
-  const query = `SELECT * FROM review WHERE movie_id = $1 ORDER BY ${sortColumn} ${orderDirection} LIMIT $2`;
-  console.log(query, id, amount);
-  const result = await pool.query(query, [id, amount]);
+  const limitClause = Number.isInteger(amount) && amount > 0 ? 'LIMIT $2' : '';
+  const query = `
+    SELECT review.*
+    FROM review
+    WHERE movie_id = $1
+    ORDER BY ${sortColumn} ${orderDirection}
+    ${limitClause};
+  `;
+  const values = limitClause ? [id, amount] : [id];
+  const result = await pool.query(query, values);
   return result;
+};
+
+const selectMovieReviewSummary = async (id) => {
+  const result = await pool.query(
+    `
+      SELECT
+        COALESCE(AVG(rating), 0) AS average_rating,
+        COUNT(*)::int AS review_count
+      FROM review
+      WHERE movie_id = $1;
+    `,
+    [id]
+  );
+  return result.rows[0];
 };
 
 const insertReview = async (
@@ -55,6 +76,7 @@ const deleteReview = async (movie_id, account_id) => {
 export {
   selectLatestReviewsByAccount,
   selectReviewsByMovie,
+  selectMovieReviewSummary,
   insertReview,
   deleteReview,
 };
