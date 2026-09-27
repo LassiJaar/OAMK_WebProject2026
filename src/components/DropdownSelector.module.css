@@ -1,0 +1,25 @@
+.select {
+  min-width: 150px;
+  padding: 10px 36px 10px 14px;
+  color: var(--color-text);
+  background: var(--color-background-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.select:hover {
+  border-color: var(--color-primary);
+}
+
+.select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgb(232 168 78 / 15%);
+}
+
+.select option {
+  color: var(--color-text);
+  background: var(--color-surface);
+}

@@ -7,9 +7,12 @@ import AccountReview from './AccountReview';
 import ChangePassword from './ChangePassword';
 import Modal from './Modal';
 
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
 const Account = () => {
   const [passwordModal, setPasswordModal] = useState(false);
   const [stats, setStats] = useState(null);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [recentReviews, setRecentReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,12 +33,44 @@ const Account = () => {
       const response = await api.get(
         `${import.meta.env.VITE_API_URL}/accounts/${account.account_id}`
       );
+
       const reviewResult = await api.get(
         `${import.meta.env.VITE_API_URL}/movies/accounts/${account.account_id}/reviews`
       );
+
+      console.log(reviewResult.data);
+
+      const favoriteResult = await api.get(
+        `${import.meta.env.VITE_API_URL}/movies/accounts/${account.account_id}/favorites`
+      );
+
       setStats(response.data);
-      setRecentReviews(
-        Array.isArray(reviewResult.data) ? reviewResult.data : []
+
+      const reviews = Array.isArray(reviewResult.data) ? reviewResult.data : [];
+
+      const reviewsWithMovies = await Promise.all(
+        reviews.map(async (review) => {
+          try {
+            const movieResult = await api.get(
+              `${import.meta.env.VITE_API_URL}/movies/${review.movie_id}`
+            );
+
+            return {
+              ...review,
+              movieTitle: movieResult.data.title,
+            };
+          } catch {
+            return review;
+          }
+        })
+      );
+
+      setRecentReviews(reviewsWithMovies);
+
+      setFavoriteMovies(
+        Array.isArray(favoriteResult.data.movies)
+          ? favoriteResult.data.movies.slice(0, 4)
+          : []
       );
     } catch (err) {
       console.log(err);
@@ -86,13 +121,17 @@ const Account = () => {
         <div className={styles.leftColumn}>
           <div className={styles.profileCard}>
             <h1>My profile</h1>
-            <p>Image here</p>
-            <p>Username</p>
+
+            <div className={styles.username}>
+              <span className={styles.label}>Username</span>
+              <strong>{account.email.split('@')[0]}</strong>
+            </div>
+
             <p className={styles.p1}>Member since {releaseDateStr}</p>
+
             <p className={styles.p1}>
-              {stats.total_reviews} reviews * {stats.total_favorites} favorites
+              {stats.total_reviews} reviews · {stats.total_favorites} favorites
             </p>
-            <button>Edit profile</button>
           </div>
 
           <div className={styles.statsCard}>
@@ -121,27 +160,65 @@ const Account = () => {
 
         <div className={styles.rightColumn}>
           <div className={styles.reviewCard}>
-            <h1>Recent Reviews</h1>
+            <div className={styles.cardHeader}>
+              <h1>Recent Reviews</h1>
+            </div>
+
             {recentReviews.length > 0 ? (
-              recentReviews.map((r) => (
-                <AccountReview key={r.movie_id} review={r}></AccountReview>
-              ))
+              <div className={styles.reviewList}>
+                {recentReviews.map((r) => (
+                  <div key={r.movie_id} className={styles.reviewItem}>
+                    <AccountReview review={r} />
+                  </div>
+                ))}
+              </div>
             ) : (
-              <p>No reviews yet.</p>
+              <p className={styles.emptyMessage}>No reviews yet.</p>
             )}
           </div>
 
           <div className={styles.favoritesCard}>
-            <h1>Favorites List</h1>
+            <div className={styles.cardHeader}>
+              <h1>Favorites</h1>
 
-            <p>
-              You have {stats.total_favorites} favorite
-              {stats.total_favorites !== 1 ? 's' : ''}.
-            </p>
+              <Link to={`/favourites/${account.account_id}`}>View all</Link>
+            </div>
 
-            <Link to={`/favourites/${account.account_id}`}>
-              View my favourites
-            </Link>
+            {favoriteMovies.length > 0 ? (
+              <div className={styles.favoritePreview}>
+                {favoriteMovies.map((movie) => (
+                  <Link
+                    key={movie.id}
+                    to={`/movie/${movie.id}`}
+                    className={styles.favoriteMovie}
+                  >
+                    {movie.posterPath ? (
+                      <img
+                        src={`${IMAGE_BASE_URL}${movie.posterPath}`}
+                        alt={`${movie.title} poster`}
+                      />
+                    ) : (
+                      <div className={styles.noPoster}>No poster</div>
+                    )}
+
+                    <span>{movie.title}</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.emptyMessage}>
+                You haven't added any movies to your favourites yet.
+              </p>
+            )}
+
+            {favoriteMovies.length > 0 && (
+              <Link
+                to={`/favourites/${account.account_id}`}
+                className={styles.viewAll}
+              >
+                View all {stats.total_favorites} favourites →
+              </Link>
+            )}
           </div>
         </div>
       </section>

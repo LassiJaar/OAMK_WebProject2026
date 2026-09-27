@@ -1,17 +1,18 @@
+import styles from './DropdownSelector.module.css';
+
 const DropdownSelector = ({ selected, setSelected, options }) => {
   return (
-    <div>
-      <select
-        value={selected}
-        onChange={(e) => setSelected(Number(e.target.value))}
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.name}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      className={styles.select}
+      value={selected}
+      onChange={(e) => setSelected(Number(e.target.value))}
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.name}
+        </option>
+      ))}
+    </select>
   );
 };
 

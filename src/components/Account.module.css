@@ -80,6 +80,24 @@
   background: var(--color-primary-hover, #e0e0e0);
 }
 
+.username {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 18px;
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.username strong {
+  font-size: 1.3rem;
+}
+
 .settingsCard {
   display: flex;
   flex-direction: column;
@@ -102,6 +120,70 @@
   font-size: 0.95rem;
 }
 
+.favoritePreview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.favoriteMovie {
+  min-width: 0;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.favoriteMovie img,
+.noPoster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  border: 1px solid var(--color-border);
+}
+
+.noPoster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--color-text-muted);
+  background: var(--color-background-light);
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.favoriteMovie span {
+  display: block;
+  margin-top: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favoriteMovie:hover span {
+  color: var(--color-primary);
+}
+
+.favoriteMovie:hover img,
+.favoriteMovie:hover .noPoster {
+  border-color: var(--color-primary);
+}
+
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reviewItem {
+  padding: 20px;
+  background: var(--color-background-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+}
+
 @media (max-width: 960px) {
   .container {
     flex-direction: column;
@@ -110,8 +192,8 @@
     gap: 20px;
   }
 
-  .left-column,
-  .right-column {
+  .leftColumn,
+  .rightColumn {
     max-width: 100%;
     flex: 1 1 100%;
   }
@@ -123,5 +205,17 @@
   .favoritesCard {
     padding: 24px 20px;
     border-radius: var(--radius-medium, 8px);
+  }
+}
+
+@media (max-width: 700px) {
+  .favoritePreview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .favoritePreview {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
