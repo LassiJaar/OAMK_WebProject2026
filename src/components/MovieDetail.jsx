@@ -15,6 +15,9 @@ const MovieDetail = () => {
   const { account } = useAccount();
 
   const [movie, setMovie] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -26,17 +29,22 @@ const MovieDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
+  
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         setLoading(true);
         setError('');
-
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/movies/${id}`
-        );
-
-        setMovie(response.data);
+        
+        const [movieResponse, reviewsResponse] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/movies/${id}`),
+          axios.get(`${import.meta.env.VITE_API_URL}/movies/${id}/reviews`),
+        ]);
+        
+        setMovie(movieResponse.data);
+        setReviews(reviewsResponse.data.reviews || []);
+        setAverageRating(Number(reviewsResponse.data.averageRating) || 0);
+        setReviewCount(reviewsResponse.data.reviewCount || 0);
       } catch (err) {
         setError(
           err.response?.data?.error?.message ||
@@ -279,6 +287,35 @@ const MovieDetail = () => {
           <p className={styles.overview}>
             {movie.overview || 'No overview is available for this movie.'}
           </p>
+
+          <section className={styles.reviewsSection} aria-labelledby="reviews-heading">
+            <div className={styles.reviewsHeader}>
+              <h2 id="reviews-heading">Community reviews</h2>
+              <p className={styles.averageRating}>
+                <strong>{averageRating.toFixed(1)} / 5</strong>
+                <span>{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
+              </p>
+            </div>
+
+            {reviews.length > 0 ? (
+              <div className={styles.reviewList}>
+                {reviews.map((review) => (
+                  <article className={styles.review} key={`${review.movie_id}-${review.account_id}`}>
+                    <div className={styles.reviewMeta}>
+                      <strong>Reviewer #{review.account_id}</strong>
+                      <span>{review.rating} / 5</span>
+                    </div>
+                    {review.text && <p>{review.text}</p>}
+                    <time dateTime={review.created_at}>
+                      {new Date(review.created_at).toLocaleDateString()}
+                    </time>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.noReviews}>No reviews yet. Be the first to review this movie.</p>
+            )}
+          </section>
 
           {movie.originalTitle && movie.originalTitle !== movie.title && (
             <p className={styles.originalTitle}>
