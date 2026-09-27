@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MovieDetail.module.css';
 import { useAccount } from '../context/useAccount';
 import { RatingSubmit } from './RatingSubmit';
+import api from '../util/api';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const BACKDROP_BASE_URL = 'https://image.tmdb.org/t/p/w1280';
@@ -12,24 +13,29 @@ const MovieDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { account } = useAccount();
-  
+
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  const [userRating, setUserRating] = useState(0); 
+
+  const [userRating, setUserRating] = useState(0);
   const [ratingLoading, setRatingLoading] = useState(false);
   const [ratingMessage, setRatingMessage] = useState('');
   const [reviewText, setReviewText] = useState('');
+
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         setLoading(true);
         setError('');
+
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/movies/${id}`
         );
+
         setMovie(response.data);
       } catch (err) {
         setError(
@@ -44,6 +50,47 @@ const MovieDetail = () => {
 
     fetchMovie();
   }, [id]);
+
+  const handleFavorite = async () => {
+    try {
+      setFavoriteLoading(true);
+
+      if (isFavorite) {
+        await api.delete(
+          `${import.meta.env.VITE_API_URL}/movies/${id}/favorite`
+        );
+        setIsFavorite(false);
+      } else {
+        await api.post(`${import.meta.env.VITE_API_URL}/movies/${id}/favorite`);
+        setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setFavoriteLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!account) {
+      setIsFavorite(false);
+      return;
+    }
+
+    const checkFavorite = async () => {
+      try {
+        const response = await api.get(
+          `${import.meta.env.VITE_API_URL}/movies/${id}/favorite`
+        );
+
+        setIsFavorite(response.data.favorite);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    checkFavorite();
+  }, [account, id]);
 
   if (loading) {
     return <p className={styles.message}>Loading movie details...</p>;
@@ -69,12 +116,18 @@ const MovieDetail = () => {
       {movie.backdropPath && (
         <div
           className={styles.backdrop}
-          style={{ backgroundImage: `url(${BACKDROP_BASE_URL}${movie.backdropPath})` }}
+          style={{
+            backgroundImage: `url(${BACKDROP_BASE_URL}${movie.backdropPath})`,
+          }}
           aria-hidden="true"
         />
       )}
 
-      <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>
+      <button
+        type="button"
+        className={styles.backButton}
+        onClick={() => navigate(-1)}
+      >
         Back to results
       </button>
 
@@ -94,6 +147,7 @@ const MovieDetail = () => {
         <div className={styles.details}>
           <p className={styles.eyebrow}>Movie details</p>
           <h1>{movie.title}</h1>
+
           {movie.tagline && <p className={styles.tagline}>{movie.tagline}</p>}
 
           <div className={styles.meta}>
@@ -111,9 +165,23 @@ const MovieDetail = () => {
           )}
 
           {account && (
+            <button
+              type="button"
+              onClick={handleFavorite}
+              disabled={favoriteLoading}
+            >
+              {favoriteLoading
+                ? 'Saving...'
+                : isFavorite
+                  ? 'Remove from favourites'
+                  : 'Add to favourites'}
+            </button>
+          )}
+
+          {account && (
             <div className={styles.ratingSection}>
               <h3>Write a Review:</h3>
-              
+
               <div className={styles.ratingContainer}>
                 <div className={styles.starsRow}>
                   {[1, 2, 3, 4, 5].map((starIdx) => {
@@ -122,12 +190,20 @@ const MovieDetail = () => {
 
                     return (
                       <div key={starIdx} className={styles.starWrapper}>
-                        <span className={userRating >= starIdx ? styles.starActive : styles.starInactive}>
+                        <span
+                          className={
+                            userRating >= starIdx
+                              ? styles.starActive
+                              : styles.starInactive
+                          }
+                        >
                           ★
                         </span>
-                        
+
                         {userRating === leftValue && (
-                          <span className={`${styles.starActive} ${styles.halfStarMask}`}>
+                          <span
+                            className={`${styles.starActive} ${styles.halfStarMask}`}
+                          >
                             ★
                           </span>
                         )}
@@ -151,12 +227,18 @@ const MovieDetail = () => {
                     );
                   })}
                 </div>
-                {userRating > 0 && <span className={styles.ratingValue}>{userRating.toFixed(1)} / 5</span>}
+
+                {userRating > 0 && (
+                  <span className={styles.ratingValue}>
+                    {userRating.toFixed(1)} / 5
+                  </span>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="review-text">Your review (optional):</label>
                 <br></br>
+
                 <textarea
                   id="review-text"
                   rows="4"
@@ -171,24 +253,29 @@ const MovieDetail = () => {
               <button
                 type="button"
                 className={styles.submitButton}
-                onClick={() => RatingSubmit(
-                  userRating,
-                  reviewText,
-                  movie,
-                  ratingLoading,
-                  setRatingLoading,
-                  setRatingMessage
-                )}
+                onClick={() =>
+                  RatingSubmit(
+                    userRating,
+                    reviewText,
+                    movie,
+                    ratingLoading,
+                    setRatingLoading,
+                    setRatingMessage
+                  )
+                }
                 disabled={ratingLoading || userRating === 0}
               >
                 {ratingLoading ? 'Submitting...' : 'Submit Review'}
               </button>
 
-              {ratingMessage && <p className={styles.ratingMessage}>{ratingMessage}</p>}
+              {ratingMessage && (
+                <p className={styles.ratingMessage}>{ratingMessage}</p>
+              )}
             </div>
           )}
 
           <h2>Overview</h2>
+
           <p className={styles.overview}>
             {movie.overview || 'No overview is available for this movie.'}
           </p>
