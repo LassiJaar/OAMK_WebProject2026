@@ -4,6 +4,8 @@ import {
   getAllClubs,
   insertClub,
   insertMovie,
+  selectClub,
+  selectClubsByAccountIdRole,
   selectMovies,
   updateClub,
 } from '../models/Club.js';
@@ -12,6 +14,27 @@ const getClubs = async (req, res, next) => {
   try {
     const result = await getAllClubs();
     res.status(200).json(result.rows || []);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getClub = async (req, res, next) => {
+  const club_id = req.params.club_id;
+  try {
+    const result = await selectClub(club_id);
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getMyClubsByRole = async (req, res, next) => {
+  const account_id = req.account?.account_id;
+  const { role } = req.query;
+  try {
+    const result = await selectClubsByAccountIdRole(account_id, role);
+    return res.status(200).json(result.rows);
   } catch (error) {
     next(error);
   }
@@ -83,6 +106,8 @@ const removeMovie = async (req, res, next) => {
 
 export {
   getClubs,
+  getClub,
+  getMyClubsByRole,
   createClub,
   removeClub,
   putClub,

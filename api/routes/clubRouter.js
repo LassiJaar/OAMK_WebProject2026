@@ -2,8 +2,10 @@ import { Router } from 'express';
 import {
   addMovie,
   createClub,
+  getClub,
   getClubs,
   getMovies,
+  getMyClubsByRole,
   putClub,
   removeClub,
   removeMovie,
@@ -15,6 +17,8 @@ const router = Router();
 
 router.get('/', getClubs);
 router.post('/', auth, createClub);
+router.get('/me', auth, getMyClubsByRole);
+router.get('/:club_id', getClub);
 router.delete('/:club_id', auth, clubRoleAuth(['owner']), removeClub);
 router.put('/:club_id', auth, clubRoleAuth(['owner']), putClub);
 router.get('/:club_id/movies', getMovies);

@@ -1,7 +1,14 @@
 import { Link } from 'react-router';
 import styles from './ClubsCard.module.css';
+import api from '../util/api';
+import { useAccount } from '../context/useAccount';
 
-const ClubsCard = ({ club, user }) => {
+const ClubsCard = ({ club, onJoin }) => {
+  const { account } = useAccount();
+  const handleJoin = async () => {
+    await api.post(`${import.meta.env.VITE_API_URL}/clubs/${club.club_id}`);
+    onJoin();
+  };
   return (
     <div className={styles.card}>
       <Link to={`/clubs/${club.club_id}`}>
@@ -13,9 +20,15 @@ const ClubsCard = ({ club, user }) => {
           ></img>
         </div>
       </Link>
-      <button className={styles.button} onClick={() => console.log('clicked')}>
-        Request to join
-      </button>
+      {club.role === 'owner' && <p>Owner</p>}
+      {club.role === 'member' && <p>Member</p>}
+      {club.role === 'pending' && <p>Already requested</p>}
+      {!club.role && account && (
+        <button className={styles.button} onClick={handleJoin}>
+          Request to join
+        </button>
+      )}
+      {!account && <p>Sign in</p>}
     </div>
   );
 };

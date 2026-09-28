@@ -10,6 +10,7 @@ import Account from './Account';
 import MovieDetail from './MovieDetail';
 import Favorites from './Favourites';
 import ProtectedRoute from './ProtectedRoute';
+import SingleClub from './SingleClub';
 
 const Main = () => {
   return (
@@ -25,10 +26,16 @@ const Main = () => {
             element={<MovieDetail></MovieDetail>}
           ></Route>
           <Route path="/clubs" element={<Clubs></Clubs>}></Route>
-          <Route path="/clubs/:id" element={<p>single</p>}></Route>
+          <Route
+            path="/clubs/:club_id"
+            element={<SingleClub></SingleClub>}
+          ></Route>
           <Route path="/signup" element={<Signup></Signup>}></Route>
           <Route path="/signin" element={<Signin></Signin>}></Route>
-          <Route path="/favourites/:id" element={<Favorites></Favorites>}></Route>
+          <Route
+            path="/favourites/:id"
+            element={<Favorites></Favorites>}
+          ></Route>
           <Route element={<ProtectedRoute></ProtectedRoute>}>
             <Route path="/account" element={<Account></Account>}></Route>
           </Route>

@@ -2,6 +2,7 @@ import {
   deleteClubAccount,
   insertClubAccount,
   selectClubAccount,
+  selectClubRoleById,
   updateRole,
 } from '../models/ClubAccount.js';
 
@@ -10,6 +11,17 @@ const getClubRoles = async (req, res, next) => {
   try {
     const result = await selectClubAccount(club_id);
     return res.status(200).json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getClubRole = async (req, res, next) => {
+  const club_id = req.params.club_id;
+  const account_id = req.account.account_id;
+  try {
+    const result = await selectClubRoleById(club_id, account_id);
+    return res.status(200).json(result.rows[0]);
   } catch (error) {
     next(error);
   }
@@ -71,4 +83,11 @@ const changeRole = async (req, res, next) => {
   }
 };
 
-export { getClubRoles, joinClub, leaveClub, removeClubAccount, changeRole };
+export {
+  getClubRoles,
+  getClubRole,
+  joinClub,
+  leaveClub,
+  removeClubAccount,
+  changeRole,
+};
