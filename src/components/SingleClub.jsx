@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAccount } from '../context/useAccount';
 import api from '../util/api';
-import { useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import SingleClubAccount from './SingleClubAccount';
 
 const SingleClub = () => {
@@ -12,6 +12,19 @@ const SingleClub = () => {
   const [members, setMembers] = useState([]);
   const [role, setRole] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleLeave = async () => {
+    const result = await api.delete(
+      `${import.meta.env.VITE_API_URL}/clubs/${club_id}/accounts/me`
+    );
+    console.log(result);
+    await fetchData();
+  };
+  const handleDelete = async () => {
+    await api.delete(`${import.meta.env.VITE_API_URL}/clubs/${club_id}`);
+    navigate('/clubs');
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -45,6 +58,8 @@ const SingleClub = () => {
     <div>
       {club && (
         <div>
+          {role !== 'owner' && <button onClick={handleLeave}>Leave</button>}
+          {role === 'owner' && <button onClick={handleDelete}>Delete</button>}
           <p>{role}</p>
           <h2>{club.name}</h2>
           <p>{club.description}</p>
@@ -59,6 +74,7 @@ const SingleClub = () => {
             ))}
         </div>
       )}
+
       {loading && <p>Loading...</p>}
     </div>
   );

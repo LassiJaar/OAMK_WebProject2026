@@ -1,7 +1,7 @@
 import { pool } from '../models/db.js';
 const clubRoleAuth = (allowedRoles) => {
   return async (req, res, next) => {
-    if (allowedRoles == ['any']) {
+    if (allowedRoles.includes('any')) {
       return next();
     }
     const account_id = req.account.account_id;
