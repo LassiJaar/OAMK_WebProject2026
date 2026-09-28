@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { useAccount } from '../context/useAccount';
 import api from '../util/api';
 import styles from './Favourites.module.css';
+import { Link } from 'react-router';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
@@ -103,21 +104,23 @@ const Favourites = () => {
               <article key={movie.id} className={styles.item}>
                 <span className={styles.number}>{index + 1}</span>
 
-                <img
-                  src={
-                    movie.posterPath
-                      ? `${IMAGE_BASE_URL}${movie.posterPath}`
-                      : undefined
-                  }
-                  alt={`${movie.title} poster`}
-                  className={styles.poster}
-                />
+                <Link to={`/movie/${movie.id}`} className={styles.movieLink}>
+                  {movie.posterPath ? (
+                    <img
+                      src={`${IMAGE_BASE_URL}${movie.posterPath}`}
+                      alt={`${movie.title} poster`}
+                      className={styles.poster}
+                    />
+                  ) : (
+                    <div className={styles.posterPlaceholder}>No poster</div>
+                  )}
 
-                <div className={styles.info}>
-                  <h2>{movie.title}</h2>
+                  <div className={styles.info}>
+                    <h2>{movie.title}</h2>
 
-                  {releaseYear && <p>{releaseYear}</p>}
-                </div>
+                    {releaseYear && <p>{releaseYear}</p>}
+                  </div>
+                </Link>
 
                 {ownList && (
                   <button
@@ -126,7 +129,7 @@ const Favourites = () => {
                     onClick={() => handleRemove(movie.id)}
                     aria-label={`Remove ${movie.title} from favourites`}
                   >
-                    X
+                    ×
                   </button>
                 )}
               </article>

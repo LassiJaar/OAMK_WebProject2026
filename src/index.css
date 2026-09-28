@@ -54,17 +54,34 @@ html {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  background:
-    radial-gradient(
-      circle at top center,
-      rgb(232 168 78 / 7%),
-      transparent 35rem
-    ),
-    var(--color-background);
   color: var(--color-text);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(circle at 0% 10%, rgb(232 168 78 / 10%), transparent 25rem),
+    radial-gradient(
+      circle at 100% 100%,
+      rgb(232 168 78 / 7%),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgb(232 168 78 / 4%),
+      transparent 25rem
+    ),
+    #0d0d12;
 }
 
 button,
