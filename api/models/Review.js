@@ -41,13 +41,6 @@ const selectMovieReviewSummary = async (id) => {
 };
 
 const insertReview = async (account_id, movie_id, rating, text) => {
-  const movieQuery = `
-    INSERT INTO movie (movie_id, title, created_at)
-    VALUES ($1, $2, NOW())
-    ON CONFLICT (movie_id) DO NOTHING;
-  `;
-  await pool.query(movieQuery, [movie_id, movie_title]);
-
   const query = `
     INSERT INTO review (movie_id, account_id, rating, text)
     VALUES ($2, $1, $3, $4)
