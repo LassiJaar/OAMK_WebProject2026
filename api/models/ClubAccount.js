@@ -2,8 +2,16 @@ import { pool } from './db.js';
 
 const selectClubAccount = async (club_id) => {
   const result = await pool.query(
-    'SELECT * FROM club_account WHERE club_id = $1;',
+    'SELECT ca.*, a.email FROM club_account ca JOIN account a ON a.account_id = ca.account_id WHERE club_id = $1;',
     [club_id]
+  );
+  return result;
+};
+
+const selectClubRoleById = async (club_id, account_id) => {
+  const result = await pool.query(
+    'SELECT * FROM club_account WHERE club_id = $1 AND account_id = $2;',
+    [club_id, account_id]
   );
   return result;
 };
@@ -37,4 +45,10 @@ const deleteClubAccount = async (account_id, club_id) => {
   return result;
 };
 
-export { selectClubAccount, insertClubAccount, updateRole, deleteClubAccount };
+export {
+  selectClubAccount,
+  selectClubRoleById,
+  insertClubAccount,
+  updateRole,
+  deleteClubAccount,
+};

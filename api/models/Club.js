@@ -5,6 +5,21 @@ const getAllClubs = async () => {
   return result;
 };
 
+const selectClub = async (club_id) => {
+  const result = await pool.query('SELECT * FROM club WHERE club_id = $1;', [
+    club_id,
+  ]);
+  return result;
+};
+
+const selectClubsByAccountIdRole = async (account_id, role) => {
+  const result = await pool.query(
+    'SELECT c.*,ca.role FROM club c LEFT JOIN club_account ca ON ca.club_id = c.club_id AND ca.account_id = $1 WHERE $2::club_role IS NULL OR role = $2;',
+    [account_id, role === 'all' ? null : role]
+  );
+  return result;
+};
+
 const insertClub = async (account_id, name, description) => {
   const client = await pool.connect();
 
@@ -69,6 +84,8 @@ const deleteMovie = async (club_id, movie_id) => {
 
 export {
   getAllClubs,
+  selectClub,
+  selectClubsByAccountIdRole,
   insertClub,
   updateClub,
   deleteClub,
