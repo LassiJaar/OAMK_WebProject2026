@@ -6,6 +6,7 @@ import api from '../util/api';
 const CreateClub = ({ onCreate }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -15,13 +16,20 @@ const CreateClub = ({ onCreate }) => {
     setError('');
     setSuccess(false);
     setLoading(true);
-    if (name === '') return setError('Must have a name');
+
+    if (!name.trim()) {
+      setError('Club name is required.');
+      setLoading(false);
+      return;
+    }
 
     try {
       await api.post(`${import.meta.env.VITE_API_URL}/clubs`, {
-        name,
-        description,
+        name: name.trim(),
+        description: description.trim(),
+        image_url: imageUrl.trim(),
       });
+
       onCreate();
 
       setSuccess(true);
@@ -40,9 +48,6 @@ const CreateClub = ({ onCreate }) => {
       <section className={styles.container}>
         <div className={styles.formCard}>
           <h1>Club created successfully</h1>
-          <Link className={styles.primaryLink} to="/">
-            Continue to Home
-          </Link>
         </div>
       </section>
     );
@@ -76,6 +81,17 @@ const CreateClub = ({ onCreate }) => {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
+
+          <div className={styles.formGroup}>
+            <label htmlFor="image_url">Club image URL</label>
+            <input
+              id="image_url"
+              type="url"
+              value={imageUrl}
+              onChange={(event) => setImageUrl(event.target.value)}
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
 
           <button type="submit" disabled={loading}>
             Create club

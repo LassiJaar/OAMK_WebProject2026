@@ -21,7 +21,12 @@ router.get('/me', auth, getMyClubsByRole);
 router.get('/:club_id', getClub);
 router.delete('/:club_id', auth, clubRoleAuth(['owner']), removeClub);
 router.put('/:club_id', auth, clubRoleAuth(['owner']), putClub);
-router.get('/:club_id/movies', getMovies);
+router.get(
+  '/:club_id/movies',
+  auth,
+  clubRoleAuth(['owner', 'member']),
+  getMovies
+);
 router.post(
   '/:club_id/movies/:movie_id',
   auth,

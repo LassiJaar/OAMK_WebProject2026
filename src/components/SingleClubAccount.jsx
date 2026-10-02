@@ -1,32 +1,49 @@
 import api from '../util/api';
-import style from './ClubsCard.module.css';
+import styles from './SingleClubAccount.module.css';
 
 const SingleClubAccount = ({ account, role, onChange }) => {
   const handleAccept = async () => {
-    await api.patch(
-      `${import.meta.env.VITE_API_URL}/clubs/${account.club_id}/accounts/${account.account_id}`,
-      { role: 'member' }
-    );
-    onChange();
+    try {
+      await api.patch(
+        `${import.meta.env.VITE_API_URL}/clubs/${account.club_id}/accounts/${account.account_id}`,
+        { role: 'member' }
+      );
+
+      onChange();
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   const handleDelete = async () => {
-    await api.delete(
-      `${import.meta.env.VITE_API_URL}/clubs/${account.club_id}/accounts/${account.account_id}`
-    );
-    onChange();
+    try {
+      await api.delete(
+        `${import.meta.env.VITE_API_URL}/clubs/${account.club_id}/accounts/${account.account_id}`
+      );
+
+      onChange();
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   return (
-    <div className={style.card}>
-      <p>
-        {account.email} {account.role}
-      </p>
+    <div className={styles.card}>
+      <div className={styles.memberInfo}>
+        <span className={styles.email}>{account.email}</span>
+        <span className={styles.role}>{account.role}</span>
+      </div>
+
       {role === 'owner' && (
-        <div>
+        <div className={styles.actions}>
           {account.role === 'pending' && (
             <button onClick={handleAccept}>Accept</button>
           )}
+
           {account.role !== 'owner' && (
-            <button onClick={handleDelete}>Delete</button>
+            <button onClick={handleDelete} className={styles.deleteButton}>
+              Delete
+            </button>
           )}
         </div>
       )}
