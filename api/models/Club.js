@@ -20,14 +20,14 @@ const selectClubsByAccountIdRole = async (account_id, role) => {
   return result;
 };
 
-const insertClub = async (account_id, name, description) => {
+const insertClub = async (account_id, name, description, image_url) => {
   const client = await pool.connect();
 
   try {
     await client.query('BEGIN');
     const clubResult = await client.query(
-      'INSERT INTO club (name, description) VALUES ($1, $2) RETURNING *',
-      [name, description]
+      'INSERT INTO club (name, description, image_url) VALUES ($1, $2, $3) RETURNING *',
+      [name, description, image_url || null]
     );
     await client.query(
       'INSERT INTO club_account (club_id, account_id, role) VALUES ($1, $2, $3) RETURNING *',
@@ -43,10 +43,10 @@ const insertClub = async (account_id, name, description) => {
   }
 };
 
-const updateClub = async (club_id, name, description) => {
+const updateClub = async (club_id, name, description, image_url) => {
   const result = await pool.query(
-    'UPDATE club SET name = $2, description = $3 WHERE club_id = $1 RETURNING *;',
-    [club_id, name, description]
+    ' UPDATE club SET name = $2, description = $3, image_url = $4 WHERE club_id = $1 RETURNING *;',
+    [club_id, name, description, image_url]
   );
   return result;
 };

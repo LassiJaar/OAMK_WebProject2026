@@ -42,9 +42,9 @@ const getMyClubsByRole = async (req, res, next) => {
 
 const createClub = async (req, res, next) => {
   const account_id = req.account?.account_id;
-  const { name, description } = req.body;
+  const { name, description, image_url } = req.body;
   try {
-    const result = await insertClub(account_id, name, description);
+    const result = await insertClub(account_id, name, description, image_url);
     return res.status(201).json(result.rows[0]);
   } catch (error) {
     next(error);
@@ -63,9 +63,9 @@ const removeClub = async (req, res, next) => {
 
 const putClub = async (req, res, next) => {
   const club_id = req.params.club_id;
-  const { name, description } = req.body;
+  const { name, description, image_url } = req.body;
   try {
-    const result = await updateClub(club_id, name, description);
+    const result = await updateClub(club_id, name, description, image_url);
     return res.status(200).json(result.rows[0]);
   } catch (error) {
     next(error);
