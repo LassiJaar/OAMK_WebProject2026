@@ -19,9 +19,10 @@ const getClubRoles = async (req, res, next) => {
 const getClubRole = async (req, res, next) => {
   const club_id = req.params.club_id;
   const account_id = req.account.account_id;
+
   try {
     const result = await selectClubRoleById(club_id, account_id);
-    return res.status(200).json(result.rows[0]);
+    return res.status(200).json(result.rows[0] || null);
   } catch (error) {
     next(error);
   }

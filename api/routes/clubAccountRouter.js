@@ -12,7 +12,7 @@ import {
 
 const router = Router({ mergeParams: true });
 
-router.get('/accounts', getClubRoles);
+router.get('/accounts', auth, clubRoleAuth(['owner', 'member']), getClubRoles);
 router.get('/accounts/me', auth, getClubRole);
 router.post('/', auth, joinClub);
 router.delete('/accounts/me', auth, clubRoleAuth(['any']), leaveClub);

@@ -29,18 +29,17 @@ const MovieDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
-  
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         setLoading(true);
         setError('');
-        
+
         const [movieResponse, reviewsResponse] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/movies/${id}`),
           axios.get(`${import.meta.env.VITE_API_URL}/movies/${id}/reviews`),
         ]);
-        
+
         setMovie(movieResponse.data);
         setReviews(reviewsResponse.data.reviews || []);
         setAverageRating(Number(reviewsResponse.data.averageRating) || 0);
@@ -161,7 +160,26 @@ const MovieDetail = () => {
           <div className={styles.meta}>
             {releaseYear && <span>{releaseYear}</span>}
             {movie.runtime > 0 && <span>{movie.runtime} min</span>}
-            {movie.rating > 0 && <span>★ {movie.rating.toFixed(1)} / 10</span>}
+
+            {movie.rating > 0 && (
+              <span className={styles.externalRating}>
+                ★ {movie.rating.toFixed(1)} / 10
+                <small>TMDB</small>
+              </span>
+            )}
+
+            <span className={styles.ourRating}>
+              {reviewCount > 0 ? (
+                <>
+                  ★ {averageRating.toFixed(1)} / 5<small>MovieNight</small>
+                </>
+              ) : (
+                <>
+                  <small>MovieNight</small>
+                  No ratings yet
+                </>
+              )}
+            </span>
           </div>
 
           {movie.genres?.length > 0 && (
@@ -175,6 +193,7 @@ const MovieDetail = () => {
           {account && (
             <button
               type="button"
+              className={styles.favoriteButton}
               onClick={handleFavorite}
               disabled={favoriteLoading}
             >
@@ -244,15 +263,13 @@ const MovieDetail = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="review-text">Your review (optional):</label>
-                <br></br>
-
+                <label htmlFor="review-text">Your review (optional)</label>
                 <textarea
                   id="review-text"
                   rows="4"
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
-                  placeholder="I liked how..."
+                  placeholder="Share your thoughts about this movie..."
                   disabled={ratingLoading}
                   className={styles.textarea}
                 />
@@ -288,19 +305,33 @@ const MovieDetail = () => {
             {movie.overview || 'No overview is available for this movie.'}
           </p>
 
-          <section className={styles.reviewsSection} aria-labelledby="reviews-heading">
+          <section
+            className={styles.reviewsSection}
+            aria-labelledby="reviews-heading"
+          >
             <div className={styles.reviewsHeader}>
               <h2 id="reviews-heading">Community reviews</h2>
               <p className={styles.averageRating}>
-                <strong>{averageRating.toFixed(1)} / 5</strong>
-                <span>{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
+                {reviewCount > 0 ? (
+                  <>
+                    <strong>★ {averageRating.toFixed(1)} / 5</strong>
+                    <span>
+                      {reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}
+                    </span>
+                  </>
+                ) : (
+                  <span>No MovieNight ratings yet</span>
+                )}
               </p>
             </div>
 
             {reviews.length > 0 ? (
               <div className={styles.reviewList}>
                 {reviews.map((review) => (
-                  <article className={styles.review} key={`${review.movie_id}-${review.account_id}`}>
+                  <article
+                    className={styles.review}
+                    key={`${review.movie_id}-${review.account_id}`}
+                  >
                     <div className={styles.reviewMeta}>
                       <strong>Reviewer #{review.account_id}</strong>
                       <span>{review.rating} / 5</span>
@@ -313,7 +344,10 @@ const MovieDetail = () => {
                 ))}
               </div>
             ) : (
-              <p className={styles.noReviews}>No reviews yet. Be the first to review this movie.</p>
+              <p className={styles.noReviews}>
+                This movie has not received any reviews on MovieNight yet. Be
+                the first to review it!
+              </p>
             )}
           </section>
 

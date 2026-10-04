@@ -1,34 +1,101 @@
 .card {
-  flex-basis: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid grey;
-  border-radius: 10px;
+  overflow: hidden;
+  min-height: 320px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-.card img {
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-hover);
+}
+
+.link {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.imageWrapper {
   width: 100%;
-  margin-bottom: 5px;
+  height: 180px;
+  overflow: hidden;
+  background: var(--color-background-light);
 }
 
-.card p {
-  padding: 0 10px;
-  min-height: 3.5rem;
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  flex: 1;
+  padding: 18px 20px 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.description {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+.role,
+.pending,
+.signIn {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.role {
+  color: var(--color-primary);
+}
+
+.pending {
+  color: var(--color-text-muted);
 }
 
 .button {
-  padding: 10px 20px;
-  margin: 5px 0;
-  background-color: white;
-  border-radius: 10px;
-  width: 90%;
+  padding: 9px 15px;
+  color: #17130d;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-small);
+  font-weight: 700;
+  cursor: pointer;
 }
 
-@media (min-width: 600px) {
-  .card {
-    max-width: calc((100% - 5rem) / 5);
-    flex: 1 1 auto;
-  }
+.button:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
