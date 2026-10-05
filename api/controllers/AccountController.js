@@ -25,6 +25,11 @@ const createAccount = async (req, res, next) => {
     const result = await insertAccount(email, hashedPassword);
     return res.status(201).json(result.rows[0]);
   } catch (error) {
+    if (error.code === '23505') {
+      const e = new Error('An account with this email already exists.');
+      e.status = 409;
+      return next(e);
+    }
     next(error);
   }
 };
@@ -66,9 +71,12 @@ const login = async (req, res, next) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-    return res
-      .status(200)
-      .json({ account_id: account.account_id, email: account.email, token, preferences: account.preferences });
+    return res.status(200).json({
+      account_id: account.account_id,
+      email: account.email,
+      token,
+      preferences: account.preferences,
+    });
   } catch (error) {
     return next(error);
   }
@@ -113,7 +121,11 @@ const updatePreferences = async (req, res, next) => {
   const { genreIds, rating } = req.body;
   const accountId = req.account?.account_id;
 
-  if (!Array.isArray(genreIds) || genreIds.length === 0 || rating === undefined) {
+  if (
+    !Array.isArray(genreIds) ||
+    genreIds.length === 0 ||
+    rating === undefined
+  ) {
     const error = new Error('genreIds array and rating are required');
     error.status = 400;
     return next(error);
@@ -138,8 +150,12 @@ const updatePreferences = async (req, res, next) => {
       }
     });
 
-    const result = await updateAccountPreferences(accountId, JSON.stringify(jsonTarget), alpha);
-    
+    const result = await updateAccountPreferences(
+      accountId,
+      JSON.stringify(jsonTarget),
+      alpha
+    );
+
     if (result.rowCount === 0) {
       const error = new Error('Account not found');
       error.status = 404;
@@ -148,7 +164,7 @@ const updatePreferences = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      preferences: result.rows[0].preferences
+      preferences: result.rows[0].preferences,
     });
   } catch (error) {
     next(error);
