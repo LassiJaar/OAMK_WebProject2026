@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { genreIdToKeyMap } from './MovieAlgorithm/genreIdToKeyMap';
 
-const getGenreIdFromKey = (genreName) => {
+export const getGenreIdFromKey = (genreName) => {
   const cleanName = genreName.trim();
   const foundPair = Object.entries(genreIdToKeyMap).find(([id, key]) => key.startsWith(cleanName));
   return foundPair ? Number(foundPair[0]) : null;
