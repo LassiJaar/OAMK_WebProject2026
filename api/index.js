@@ -54,7 +54,11 @@ app.use((req, res, next) => {
 
 app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-  console.log('Backend hot reload is working!');
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+    console.log('Backend hot reload is working!');
+  });
+}
+
+export default app;
