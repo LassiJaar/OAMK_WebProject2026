@@ -3,11 +3,13 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MovieDetail.module.css';
 import { useAccount } from '../context/useAccount';
-import { RatingSubmit } from './RatingSubmit';
+import { RatingSubmit, getGenreIdFromKey } from './RatingSubmit';
 import api from '../util/api';
+
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const BACKDROP_BASE_URL = 'https://image.tmdb.org/t/p/w1280';
+
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -70,6 +72,27 @@ const MovieDetail = () => {
       } else {
         await api.post(`${import.meta.env.VITE_API_URL}/movies/${id}/favorite`);
         setIsFavorite(true);
+        const token = sessionStorage.getItem('token');
+
+
+        const mappedGenreIds = movie.genres
+          ? movie.genres.map(name => getGenreIdFromKey(name)).filter(gid => gid !== null) : [];
+
+        const interactResponse = await axios.post(
+          `${import.meta.env.VITE_API_URL}/accounts/interact`, 
+          { 
+            genreIds: mappedGenreIds,
+            rating: 5 
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (interactResponse.data?.preferences) {
+        sessionStorage.setItem(
+          'user_preferences', 
+          JSON.stringify(interactResponse.data.preferences)
+        );
+      }
+
       }
     } catch (err) {
       console.error(err);
