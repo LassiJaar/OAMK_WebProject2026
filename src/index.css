@@ -1,50 +1,54 @@
 :root {
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color: #f5f5f5;
-  background: #0d0d12;
+  color: var(--color-text);
+  background-color: var(--color-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   /* Main colors */
   --color-background: #0d0d12;
   --color-background-light: #15151d;
+
   --color-surface: #1b1b25;
+  --color-surface-light: #242431;
   --color-surface-hover: #242431;
 
   --color-primary: #e8a84e;
-  --color-primary-hover: #f2bb68;
+  --color-primary-hover: #f0b966;
 
   --color-text: #f5f5f5;
   --color-text-secondary: #b8b8c2;
   --color-text-muted: #858592;
 
-  --color-border: #30303b;
+  --color-border: #383844;
 
+  --color-danger: #d85c5c;
   --color-error: #e56b6f;
   --color-success: #65c18c;
 
+  /* Layout */
+  --content-max-width: 1400px;
   --content-width: 1200px;
+  --content-padding: 40px;
 
+  /* Components */
   --radius-small: 8px;
-  --radius-medium: 14px;
+  --radius-medium: 12px;
   --radius-large: 20px;
 
-  --shadow-card: 0 10px 30px rgb(0 0 0 / 25%);
+  --shadow-card: 0 4px 20px rgb(0 0 0 / 20%);
   --shadow-hover: 0 14px 35px rgb(0 0 0 / 35%);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -54,11 +58,11 @@ html {
 }
 
 body {
-  position: relative;
-  isolation: isolate;
+  margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  margin: 0;
+
+  background: var(--color-background);
   color: var(--color-text);
 }
 
@@ -81,7 +85,7 @@ body::before {
       rgb(232 168 78 / 4%),
       transparent 25rem
     ),
-    #0d0d12;
+    var(--color-background);
 }
 
 button,
@@ -97,11 +101,12 @@ button {
 
 a {
   color: inherit;
+  text-decoration: none;
 }
 
 img {
-  max-width: 100%;
   display: block;
+  max-width: 100%;
 }
 
 #root {

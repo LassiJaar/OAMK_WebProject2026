@@ -211,10 +211,6 @@
 }
 
 @media (max-width: 1100px) {
-  .sections {
-    grid-template-columns: 1fr;
-  }
-
   .movieGrid {
     grid-template-columns: repeat(5, minmax(120px, 1fr));
   }
