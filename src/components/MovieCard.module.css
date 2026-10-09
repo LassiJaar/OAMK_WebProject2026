@@ -41,3 +41,15 @@
   font-weight: 600;
 }
 
+@media (max-width: 700px) {
+  .card {
+    flex-basis: 165px;
+    width: 165px;
+  }
+
+  .card p {
+    min-height: 3rem;
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+}

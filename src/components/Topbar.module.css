@@ -3,16 +3,15 @@
   top: 0;
   z-index: 10;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: 180px 1fr 180px;
   align-items: center;
-  justify-content: space-between;
 
   min-height: 72px;
-  padding: 0 32px;
+  padding: 0 var(--content-padding);
 
   background: rgb(13 13 18 / 90%);
   border-bottom: 1px solid var(--color-border);
-
   backdrop-filter: blur(14px);
 }
 
@@ -23,88 +22,110 @@
 
 .center {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
-/* Navigation buttons */
 .tab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  padding: 10px 18px;
 
-  padding: 9px 16px;
-
-  color: var(--color-text-secondary);
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-small);
 
+  background: var(--color-surface);
+  color: var(--color-text);
+
   font-weight: 600;
-  text-decoration: none;
 
   transition:
-    color 0.2s,
-    background 0.2s,
-    border-color 0.2s,
-    transform 0.2s;
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .tab:hover {
-  color: var(--color-text);
-  background: var(--color-surface-hover);
+  background: var(--color-surface-light);
   border-color: var(--color-primary);
+  color: var(--color-primary);
   transform: translateY(-1px);
 }
 
-.tab:active {
-  transform: translateY(0);
-}
-
-/* Account button */
 .account {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  justify-self: end;
 
-  padding: 9px 16px;
-  margin-left: auto;
+  padding: 10px 18px;
 
-  color: #17130d;
-  background: var(--color-primary);
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-small);
 
+  background: var(--color-primary);
+  color: #17130d;
+
   font-weight: 700;
-  text-decoration: none;
 
   transition:
-    background 0.2s,
-    border-color 0.2s,
-    transform 0.2s;
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .account:hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
+  color: #17130d;
   transform: translateY(-1px);
 }
 
-.account:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .topbar {
-    padding: 0 16px;
+    grid-template-columns: 150px 1fr 150px;
+    padding: 0 20px;
+  }
+
+  .logo {
+    width: 150px;
   }
 
   .center {
-    gap: 4px;
+    gap: 10px;
   }
 
   .tab,
   .account {
-    padding: 8px 10px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 650px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px 12px;
+    padding: 10px 16px;
+  }
+
+  .logo {
+    width: 140px;
+  }
+
+  .account {
+    justify-self: end;
+  }
+
+  .center {
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .tab {
+    padding: 8px 14px;
   }
 }

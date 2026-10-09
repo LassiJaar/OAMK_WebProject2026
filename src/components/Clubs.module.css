@@ -75,8 +75,23 @@
 
 .clubs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.title {
+  margin: 0 0 24px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.filters button {
+  padding: 9px 16px;
 }
 
 .message,
@@ -112,38 +127,18 @@
 
 @media (max-width: 1000px) {
   .clubs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 700px) {
-  .page {
-    width: min(100% - 32px, 1200px);
-    padding: 24px 0 40px;
+  .clubs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .header h1 {
-    font-size: 2rem;
-  }
-
-  .createButton {
-    width: 100%;
-  }
-
+@media (max-width: 450px) {
   .clubs {
     grid-template-columns: 1fr;
-  }
-
-  .filters {
-    width: 100%;
-  }
-
-  .filters button {
-    flex: 1;
   }
 }
