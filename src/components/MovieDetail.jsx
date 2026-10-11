@@ -6,10 +6,8 @@ import { useAccount } from '../context/useAccount';
 import { RatingSubmit, getGenreIdFromKey } from './RatingSubmit';
 import api from '../util/api';
 
-
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const BACKDROP_BASE_URL = 'https://image.tmdb.org/t/p/w1280';
-
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -30,6 +28,15 @@ const MovieDetail = () => {
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+
+  const fetchReviews = async () => {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/movies/${id}/reviews`
+    );
+    setReviews(response.data.reviews || []);
+    setAverageRating(Number(response.data.averageRating) || 0);
+    setReviewCount(response.data.reviewCount || 0);
+  };
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -72,27 +79,26 @@ const MovieDetail = () => {
       } else {
         await api.post(`${import.meta.env.VITE_API_URL}/movies/${id}/favorite`);
         setIsFavorite(true);
-        const token = sessionStorage.getItem('token');
-
 
         const mappedGenreIds = movie.genres
-          ? movie.genres.map(name => getGenreIdFromKey(name)).filter(gid => gid !== null) : [];
+          ? movie.genres
+              .map((name) => getGenreIdFromKey(name))
+              .filter((gid) => gid !== null)
+          : [];
 
-        const interactResponse = await axios.post(
-          `${import.meta.env.VITE_API_URL}/accounts/interact`, 
-          { 
+        const interactResponse = await api.post(
+          `${import.meta.env.VITE_API_URL}/accounts/interact`,
+          {
             genreIds: mappedGenreIds,
-            rating: 5 
-          },
-          { headers: { Authorization: `Bearer ${token}` } }
+            rating: 5,
+          }
         );
         if (interactResponse.data?.preferences) {
-        sessionStorage.setItem(
-          'user_preferences', 
-          JSON.stringify(interactResponse.data.preferences)
-        );
-      }
-
+          sessionStorage.setItem(
+            'user_preferences',
+            JSON.stringify(interactResponse.data.preferences)
+          );
+        }
       }
     } catch (err) {
       console.error(err);
@@ -308,7 +314,8 @@ const MovieDetail = () => {
                     movie,
                     ratingLoading,
                     setRatingLoading,
-                    setRatingMessage
+                    setRatingMessage,
+                    fetchReviews
                   )
                 }
                 disabled={ratingLoading || userRating === 0}
