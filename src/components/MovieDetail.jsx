@@ -29,6 +29,15 @@ const MovieDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
+  const fetchReviews = async () => {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/movies/${id}/reviews`
+    );
+    setReviews(response.data.reviews || []);
+    setAverageRating(Number(response.data.averageRating) || 0);
+    setReviewCount(response.data.reviewCount || 0);
+  };
+
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -305,7 +314,8 @@ const MovieDetail = () => {
                     movie,
                     ratingLoading,
                     setRatingLoading,
-                    setRatingMessage
+                    setRatingMessage,
+                    fetchReviews
                   )
                 }
                 disabled={ratingLoading || userRating === 0}

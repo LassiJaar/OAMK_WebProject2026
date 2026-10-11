@@ -15,7 +15,8 @@ const RatingSubmit = async (
   movie,
   ratingLoading,
   setRatingLoading,
-  setRatingMessage
+  setRatingMessage,
+  fetchReviews
 ) => {
   if (ratingLoading) return;
   if (ratingValue === 0) {
@@ -54,6 +55,7 @@ const RatingSubmit = async (
     }
 
     setRatingMessage('Review and preferences submitted successfully!');
+    await fetchReviews();
   } catch (err) {
     setRatingMessage(
       err.response?.data?.error?.message || 'Failed to submit data.'
