@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import styles from './Signup.module.css';
+import { useAccount  } from '../context/useAccount';
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -11,6 +12,9 @@ const Signup = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const { signIn } = useAccount();
+  const navigate = useNavigate();
 
   const validatePassword = (value) => {
     return (
@@ -69,10 +73,13 @@ const Signup = () => {
         throw new Error(data?.error?.message || 'Registration failed.');
       }
 
-      setSuccess(true);
+      await signIn({ email: trimmedEmail, password });
+
       setEmail('');
       setPassword('');
       setConfirmPassword('');
+      navigate('/'); 
+
     } catch (requestError) {
       setError(
         requestError.message || 'Something went wrong. Please try again later.'
