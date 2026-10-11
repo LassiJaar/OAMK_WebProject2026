@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AccountContext } from './AccountContext.js';
 import axios from 'axios';
+import { setUnauthorizedHandler } from '../util/api.js';
 const AccountProvider = ({ children }) => {
   const accountFromStorage = sessionStorage.getItem('account');
   const [account, setAccount] = useState(
@@ -24,15 +25,25 @@ const AccountProvider = ({ children }) => {
     sessionStorage.setItem('account', JSON.stringify(response.data));
     sessionStorage.setItem('token', response.data.token);
     if (response.data.preferences) {
-      sessionStorage.setItem('user_preferences', JSON.stringify(response.data.preferences));
+      sessionStorage.setItem(
+        'user_preferences',
+        JSON.stringify(response.data.preferences)
+      );
     }
   };
-  const signOut = async () => {
+
+  const signOut = useCallback(() => {
     sessionStorage.removeItem('account');
     sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user_preferences'); 
+    sessionStorage.removeItem('user_preferences');
     setAccount(null);
-  };
+  }, []);
+
+  useEffect(() => {
+    setUnauthorizedHandler(signOut);
+    return () => setUnauthorizedHandler(null);
+  }, [signOut]);
+
   return (
     <AccountContext.Provider
       value={{ account, setAccount, signUp, signIn, signOut }}
