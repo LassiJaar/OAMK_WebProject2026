@@ -1,18 +1,20 @@
-import axios from 'axios';
 import { genreIdToKeyMap } from './MovieAlgorithm/genreIdToKeyMap';
+import api from '../util/api';
 
 export const getGenreIdFromKey = (genreName) => {
   const cleanName = genreName.trim();
-  const foundPair = Object.entries(genreIdToKeyMap).find(([id, key]) => key.startsWith(cleanName));
+  const foundPair = Object.entries(genreIdToKeyMap).find(([id, key]) =>
+    key.startsWith(cleanName)
+  );
   return foundPair ? Number(foundPair[0]) : null;
 };
 
 const RatingSubmit = async (
-  ratingValue, 
+  ratingValue,
   reviewText,
-  movie, 
-  ratingLoading, 
-  setRatingLoading, 
+  movie,
+  ratingLoading,
+  setRatingLoading,
   setRatingMessage
 ) => {
   if (ratingLoading) return;
@@ -20,37 +22,35 @@ const RatingSubmit = async (
     setRatingMessage('Please select a star rating first.');
     return;
   }
-  
+
   setRatingLoading(true);
   setRatingMessage('');
 
   try {
-    const token = sessionStorage.getItem('token');
-    
     const genreIds = movie?.genres
-      ? movie.genres.map(name => getGenreIdFromKey(name)).filter(id => id !== null)
+      ? movie.genres
+          .map((name) => getGenreIdFromKey(name))
+          .filter((id) => id !== null)
       : [];
 
     const [reviewResponse, interactResponse] = await Promise.all([
-        axios.post(
-            `${import.meta.env.VITE_API_URL}/movies/${movie.id}/reviews`,
-            { 
-                rating: Math.round(ratingValue), 
-                text: reviewText, 
-                movieTitle: movie.title || movie.originalTitle || 'Unknown Movie'
-            }, 
-            { headers: { Authorization: `Bearer ${token}` } }
-        ),
-        
-        axios.post(
-            `${import.meta.env.VITE_API_URL}/accounts/interact`,
-            { genreIds: genreIds, rating: ratingValue },
-            { headers: { Authorization: `Bearer ${token}` } }
-        )
-        ]);
+      api.post(`${import.meta.env.VITE_API_URL}/movies/${movie.id}/reviews`, {
+        rating: Math.round(ratingValue),
+        text: reviewText,
+        movieTitle: movie.title || movie.originalTitle || 'Unknown Movie',
+      }),
+
+      api.post(`${import.meta.env.VITE_API_URL}/accounts/interact`, {
+        genreIds: genreIds,
+        rating: ratingValue,
+      }),
+    ]);
 
     if (interactResponse.data?.success && interactResponse.data?.preferences) {
-      sessionStorage.setItem('user_preferences', JSON.stringify(interactResponse.data.preferences));
+      sessionStorage.setItem(
+        'user_preferences',
+        JSON.stringify(interactResponse.data.preferences)
+      );
     }
 
     setRatingMessage('Review and preferences submitted successfully!');
