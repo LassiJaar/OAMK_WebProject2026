@@ -79,8 +79,8 @@
 }
 
 .options {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -126,8 +126,27 @@
 
 .moviegrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
   gap: 20px;
+}
+
+.moviegrid > * {
+  flex: 1 1 auto;
+  height: 100%;
+  max-width: 100%;
+  min-width: 0;
+  width: 100%;
+}
+
+.moviegrid > * a,
+.moviegrid > * a > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.moviegrid > * img {
+  margin-top: auto;
 }
 
 .message {
@@ -149,7 +168,7 @@
   }
 
   .pageTitle {
-    font-size: 2rem;
+    font-size: clamp(1.8rem, 8vw, 2rem);
   }
 
   .searchSection,
@@ -167,8 +186,29 @@
     width: 100%;
   }
 
+  .options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .moviegrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .page {
+    width: calc(100% - 24px);
+  }
+
+  .searchSection,
+  .filters,
+  .results {
+    padding: 16px;
+  }
+
+  .options {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }

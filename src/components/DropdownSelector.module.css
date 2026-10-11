@@ -1,5 +1,6 @@
 .select {
-  min-width: 150px;
+  width: 100%;
+  min-width: 0;
   padding: 10px 36px 10px 14px;
   color: var(--color-text);
   background: var(--color-background-light);
