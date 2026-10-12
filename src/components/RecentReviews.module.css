@@ -1,0 +1,138 @@
+.section {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.header p {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+}
+
+.moreLink {
+  flex-shrink: 0;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.moreLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.reviewList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.review {
+  min-width: 0;
+  padding: 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-card);
+}
+
+.movieInfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+}
+
+.movieTitle {
+  color: var(--color-text);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.movieTitle:hover {
+  color: var(--color-primary);
+}
+
+.reviewer,
+.date {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.rating span {
+  color: var(--color-primary);
+  letter-spacing: 2px;
+}
+
+.rating strong {
+  font-size: 0.9rem;
+}
+
+.reviewText {
+  margin: 12px 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.message,
+.error {
+  padding: 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+}
+
+.message {
+  color: var(--color-text-secondary);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+@media (max-width: 700px) {
+  .section {
+    padding: 24px 12px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header h2 {
+    font-size: 1.6rem;
+  }
+
+  .reviewList {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .review {
+    padding: 14px;
+  }
+}

@@ -1,14 +1,18 @@
-import React from 'react';
 import NowPlaying from './NowPlaying';
 import ForYou from './MovieAlgorithm/ForYou';
-import styles from './Main.module.css';
+import Welcome from './Welcome';
+import RecentReviews from './RecentReviews';
+import HomeClubs from './HomeClubs';
 
 const HomeView = () => {
   return (
-    <>
-        <NowPlaying></NowPlaying>
-        <ForYou></ForYou>
-    </>
+    <main>
+      <Welcome />
+      <NowPlaying />
+      <RecentReviews />
+      <ForYou />
+      <HomeClubs />
+    </main>
   );
 };
 

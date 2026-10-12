@@ -4,6 +4,7 @@ import {
   selectLatestReviewsByAccount,
   selectMovieReviewSummary,
   selectReviewsByMovie,
+  selectLatestReviews,
 } from '../models/Review.js';
 
 const getLatestReviewsByAccount = async (req, res, next) => {
@@ -31,6 +32,21 @@ const getReviewsByMovie = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+const getLatestReviews = async (req, res, next) => {
+  const requestedAmount = Number(req.query.amount ?? 5);
+  const amount =
+    Number.isInteger(requestedAmount) && requestedAmount > 0
+      ? Math.min(requestedAmount, 10)
+      : 5;
+
+  try {
+    const result = await selectLatestReviews(amount);
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    return next(error);
   }
 };
 
@@ -77,4 +93,5 @@ export {
   getReviewsByMovie,
   createReview,
   removeReview,
+  getLatestReviews,
 };

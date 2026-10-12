@@ -11,6 +11,7 @@ import MovieDetail from './MovieDetail';
 import Favorites from './Favourites';
 import ProtectedRoute from './ProtectedRoute';
 import SingleClub from './SingleClub';
+import Footer from './Footer';
 
 const Main = () => {
   return (
@@ -41,6 +42,7 @@ const Main = () => {
           </Route>
         </Routes>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

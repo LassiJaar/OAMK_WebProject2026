@@ -86,10 +86,6 @@ const Favourites = () => {
           Share
         </button>
 
-        <button type="button">Sort ▼</button>
-
-        <button type="button">Filter</button>
-
         {shareMessage && <span>{shareMessage}</span>}
       </div>
 

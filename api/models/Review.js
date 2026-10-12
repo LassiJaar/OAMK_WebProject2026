@@ -26,6 +26,21 @@ const selectReviewsByMovie = async (id, amount, sort, order) => {
   return result;
 };
 
+const selectLatestReviews = async (amount = 5) => {
+  const result = await pool.query(
+    `
+      SELECT r.*, a.email
+      FROM review r
+      JOIN account a ON a.account_id = r.account_id
+      ORDER BY r.created_at DESC
+      LIMIT $1;
+    `,
+    [amount]
+  );
+
+  return result;
+};
+
 const selectMovieReviewSummary = async (id) => {
   const result = await pool.query(
     `
@@ -65,6 +80,7 @@ const deleteReview = async (movie_id, account_id) => {
 export {
   selectLatestReviewsByAccount,
   selectReviewsByMovie,
+  selectLatestReviews,
   selectMovieReviewSummary,
   insertReview,
   deleteReview,
