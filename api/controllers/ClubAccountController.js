@@ -35,6 +35,11 @@ const joinClub = async (req, res, next) => {
     const result = await insertClubAccount(account_id, club_id);
     return res.status(200).json(result.rows[0]);
   } catch (error) {
+    if (error.code === '23505') {
+      const e = new Error('You are already in the club.');
+      e.status = 409;
+      return next(e);
+    }
     next(error);
   }
 };

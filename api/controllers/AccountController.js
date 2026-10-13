@@ -10,6 +10,7 @@ import {
 } from '../models/Account.js';
 import jwt from 'jsonwebtoken';
 import { genreIdToKeyMap } from '../helper/genreIdToKeyMap.js';
+import { pool } from '../models/db.js';
 const { sign } = jwt;
 
 const createAccount = async (req, res, next) => {
@@ -36,13 +37,17 @@ const createAccount = async (req, res, next) => {
 
 const removeAccount = async (req, res, next) => {
   const { id } = req.params;
+  const ownedClubs = await pool.query(
+    'SELECT club_id FROM club_account WHERE account_id = $1 AND role = $2',
+    [id, 'owner']
+  );
   if (req.account?.account_id != id) {
     const error = new Error('You can only delete your own account');
     error.status = 403;
     return next(error);
   }
   try {
-    await deleteAccount(id);
+    await deleteAccount(id, ownedClubs.rows);
     return res.status(200).end();
   } catch (error) {
     return next(error);
