@@ -1,13 +1,16 @@
 import TopbarTab from './TopbarTab';
 import styles from './Topbar.module.css';
 import logo from '../assets/MovieNightLogoVer2.png';
+import { Link } from 'react-router';
 import { useAccount } from '../context/useAccount';
 
 const Topbar = () => {
   const { account } = useAccount();
   return (
     <div className={styles.topbar}>
-      <img src={logo} alt="MovieNight logo" className={styles.logo} />
+      <Link to="/" className={styles.logoLink} aria-label="MovieNight home">
+        <img src={logo} alt="MovieNight logo" className={styles.logo} />
+      </Link>
 
       <div className={styles.center}>
         <TopbarTab to="/" text="Home" styles={styles.tab} />
