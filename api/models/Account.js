@@ -70,11 +70,27 @@ const updateAccountPreferences = async (id, jsonTarget, alpha) => {
   return result;
 };
 
-const deleteAccount = async (id) => {
-  const result = await pool.query('DELETE FROM account WHERE account_id = $1', [
-    id,
-  ]);
-  return result;
+const deleteAccount = async (id, ownedClubs) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+    ownedClubs.map(
+      async (c) =>
+        await client.query('DELETE FROM club WHERE club_id = $1', [c.club_id])
+    );
+    const result = await pool.query(
+      'DELETE FROM account WHERE account_id = $1',
+      [id]
+    );
+    await client.query('COMMIT');
+    return result;
+  } catch (e) {
+    await client.query('ROLLBACK');
+    throw e;
+  } finally {
+    client.release();
+  }
 };
 
 const selectAccountStatistics = async (id) => {

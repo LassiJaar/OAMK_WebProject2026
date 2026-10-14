@@ -47,6 +47,11 @@ const createClub = async (req, res, next) => {
     const result = await insertClub(account_id, name, description, image_url);
     return res.status(201).json(result.rows[0]);
   } catch (error) {
+    if (error.code === '23505') {
+      const e = new Error('A club with this name already exists.');
+      e.status = 409;
+      return next(e);
+    }
     next(error);
   }
 };
@@ -68,6 +73,11 @@ const putClub = async (req, res, next) => {
     const result = await updateClub(club_id, name, description, image_url);
     return res.status(200).json(result.rows[0]);
   } catch (error) {
+    if (error.code === '23505') {
+      const e = new Error('A club with this name already exists.');
+      e.status = 409;
+      return next(e);
+    }
     next(error);
   }
 };
@@ -89,6 +99,11 @@ const addMovie = async (req, res, next) => {
     const result = await insertMovie(club_id, movie_id);
     return res.status(200).json(result.rows[0]);
   } catch (error) {
+    if (error.code === '23505') {
+      const e = new Error('This movie is already added.');
+      e.status = 409;
+      return next(e);
+    }
     return next(error);
   }
 };
