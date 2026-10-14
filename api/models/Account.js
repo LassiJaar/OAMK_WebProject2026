@@ -75,11 +75,10 @@ const deleteAccount = async (id, ownedClubs) => {
 
   try {
     await client.query('BEGIN');
-    ownedClubs.map(
-      async (c) =>
-        await client.query('DELETE FROM club WHERE club_id = $1', [c.club_id])
-    );
-    const result = await pool.query(
+    for (const c of ownedClubs) {
+      await client.query('DELETE FROM club WHERE club_id = $1', [c.club_id]);
+    }
+    const result = await client.query(
       'DELETE FROM account WHERE account_id = $1',
       [id]
     );
